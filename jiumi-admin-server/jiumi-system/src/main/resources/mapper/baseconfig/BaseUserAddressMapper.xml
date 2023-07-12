@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.baseconfig.mapper.BaseUserAddressMapper">
+
+    <resultMap type="BaseUserAddress" id="BaseUserAddressResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="district"    column="district"    />
+        <result property="defaultFlag"    column="default_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseUserAddressVo">
+        select id, user_id, user_name, address, phone, district, default_flag, remark, create_by, create_time, update_by, update_time from base_user_address
+    </sql>
+
+    <select id="selectBaseUserAddressList" parameterType="BaseUserAddress" resultMap="BaseUserAddressResult">
+        <include refid="selectBaseUserAddressVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="defaultFlag != null  and defaultFlag != ''"> and default_flag = #{defaultFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseUserAddressById" parameterType="String" resultMap="BaseUserAddressResult">
+        <include refid="selectBaseUserAddressVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseUserAddress" parameterType="BaseUserAddress" useGeneratedKeys="true" keyProperty="id">
+        insert into base_user_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="address != null">address,</if>
+            <if test="phone != null">phone,</if>
+            <if test="district != null">district,</if>
+            <if test="defaultFlag != null">default_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="district != null">#{district},</if>
+            <if test="defaultFlag != null">#{defaultFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseUserAddress" parameterType="BaseUserAddress">
+        update base_user_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="defaultFlag != null">default_flag = #{defaultFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateAddressCancelDefault" parameterType="BaseUserAddress">
+        update base_user_address set default_flag =0  where user_id = #{userId}
+    </update>
+
+    <delete id="deleteBaseUserAddressById" parameterType="String">
+        delete from base_user_address where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseUserAddressByIds" parameterType="String">
+        delete from base_user_address where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,110 @@
+@charset "UTF-8";
+/**
+ * 下方引入的为uView UI的集成样式文件，为scss预处理器，其中包含了一些"u-"开头的自定义变量
+ * 使用的时候，请将下面的一行复制到您的uniapp项目根目录的uni.scss中即可
+ * uView自定义的css类名和scss变量，均以"u-"开头，不会造成冲突，请放心使用 
+ */
+.goods-items.data-v-61463182 {
+  background-color: #fff;
+  padding: 20rpx;
+  border-radius: 30rpx;
+}
+.u-wrap.data-v-61463182 {
+  height: calc(100vh);
+  display: flex;
+  flex-direction: column;
+}
+.u-search-box.data-v-61463182 {
+  padding: 18rpx 30rpx;
+}
+.u-menu-wrap.data-v-61463182 {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+.u-search-inner.data-v-61463182 {
+  background-color: #eaeaea;
+  border-radius: 100rpx;
+  display: flex;
+  align-items: center;
+  padding: 10rpx 16rpx;
+}
+.u-search-text.data-v-61463182 {
+  font-size: 26rpx;
+  color: #909399;
+  margin-left: 10rpx;
+}
+.u-tab-view.data-v-61463182 {
+  width: 200rpx;
+  height: 100%;
+}
+.u-tab-item.data-v-61463182 {
+  height: 110rpx;
+  background: #f6f6f6;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #444;
+  font-weight: 400;
+  line-height: 1;
+}
+.u-tab-item-active.data-v-61463182 {
+  position: relative;
+  color: #000;
+  font-size: 30rpx;
+  font-weight: 600;
+  background: #fff;
+}
+.u-tab-item-active.data-v-61463182::before {
+  content: "";
+  position: absolute;
+  border-left: 2px solid #D70B0B;
+  height: 60rpx;
+  left: 0;
+  top: 26rpx;
+}
+.u-tab-view.data-v-61463182 {
+  height: 100%;
+}
+.right-box.data-v-61463182 {
+  background-color: #fafafa;
+}
+.page-view.data-v-61463182 {
+  padding: 16rpx;
+}
+.class-item.data-v-61463182 {
+  margin-bottom: 30rpx;
+  padding: 16rpx;
+  border-radius: 8rpx;
+}
+.item-title.data-v-61463182 {
+  font-size: 26rpx;
+  color: #303133;
+  font-weight: bold;
+}
+.item-menu-name.data-v-61463182 {
+  font-weight: normal;
+  font-size: 24rpx;
+  color: #303133;
+}
+.item-container.data-v-61463182 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.thumb-box.data-v-61463182 {
+  width: 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 20rpx;
+  min-height: 550rpx;
+}
+.item-menu-image.data-v-61463182 {
+  width: 120rpx;
+  height: 120rpx;
+}
+

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "预约项目",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "u-project": "/uview-ui/components/u-project/u-project",
+    "u-empty": "/uview-ui/components/u-empty/u-empty"
+  }
+}

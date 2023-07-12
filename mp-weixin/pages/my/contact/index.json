@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "联系客服",
+  "usingComponents": {
+    "u-card": "/uview-ui/components/u-card/u-card",
+    "u-image": "/uview-ui/components/u-image/u-image"
+  }
+}

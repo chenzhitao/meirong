@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "分类",
+  "usingComponents": {
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-capsule-btn": "/uview-ui/components/u-capsule-btn/u-capsule-btn"
+  }
+}

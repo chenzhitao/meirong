@@ -1,0 +1,57 @@
+@charset "UTF-8";
+/**
+ * 下方引入的为uView UI的集成样式文件，为scss预处理器，其中包含了一些"u-"开头的自定义变量
+ * 使用的时候，请将下面的一行复制到您的uniapp项目根目录的uni.scss中即可
+ * uView自定义的css类名和scss变量，均以"u-"开头，不会造成冲突，请放心使用 
+ */
+.invite.data-v-02975234 {
+  padding: 30rpx;
+}
+.invite .rule.data-v-02975234 {
+  min-height: 200rpx;
+}
+.invite .rule .title.data-v-02975234 {
+  margin: 30rpx 0;
+}
+.invite .box.data-v-02975234 {
+  background: #FFFFFF;
+  border: 10rpx solid #E6DEDF;
+  border-radius: 30rpx;
+  margin-top: 30rpx;
+  padding: 30rpx;
+  position: relative;
+}
+.invite .box .box-content.data-v-02975234 {
+  min-height: 100rpx;
+}
+.invite .box .box-tab.data-v-02975234 {
+  padding: 15rpx 30rpx;
+}
+.invite .box .active.data-v-02975234 {
+  background: #E6DEDF;
+  border-radius: 30rpx;
+  color: #333;
+  font-weight: bold;
+}
+.invite .performance.data-v-02975234 {
+  position: absolute;
+  top: -70rpx;
+  left: -12rpx;
+  width: 400rpx;
+  height: 100rpx;
+  z-index: -1;
+}
+.invite .performances.data-v-02975234 {
+  position: absolute;
+  top: 20rpx;
+  left: 100rpx;
+  width: 200rpx;
+  height: 30rpx;
+}
+.invite .content.data-v-02975234 {
+  background: #EDE6E6;
+  border-radius: 30rpx;
+  padding: 30rpx;
+  min-height: 100rpx;
+}
+

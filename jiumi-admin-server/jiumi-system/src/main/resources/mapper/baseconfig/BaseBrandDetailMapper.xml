@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.baseconfig.mapper.BaseBrandDetailMapper">
+
+    <resultMap type="BaseBrandDetail" id="BaseBrandDetailResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="topImg"    column="top_img"    />
+        <result property="detailImg"    column="detail_img"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectBaseBrandDetailVo">
+        select id, title, top_img, detail_img, content, status, create_time, create_by, update_time, update_by from base_brand_detail
+    </sql>
+
+    <select id="selectBaseBrandDetailList" parameterType="BaseBrandDetail" resultMap="BaseBrandDetailResult">
+        <include refid="selectBaseBrandDetailVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseBrandDetailById" parameterType="Long" resultMap="BaseBrandDetailResult">
+        <include refid="selectBaseBrandDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseBrandDetail" parameterType="BaseBrandDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into base_brand_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="topImg != null">top_img,</if>
+            <if test="detailImg != null">detail_img,</if>
+            <if test="content != null">content,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="topImg != null">#{topImg},</if>
+            <if test="detailImg != null">#{detailImg},</if>
+            <if test="content != null">#{content},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseBrandDetail" parameterType="BaseBrandDetail">
+        update base_brand_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="topImg != null">top_img = #{topImg},</if>
+            <if test="detailImg != null">detail_img = #{detailImg},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseBrandDetailById" parameterType="Long">
+        delete from base_brand_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseBrandDetailByIds" parameterType="String">
+        delete from base_brand_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

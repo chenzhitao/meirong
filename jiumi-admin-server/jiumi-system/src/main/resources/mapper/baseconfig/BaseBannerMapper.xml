@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.baseconfig.mapper.BaseBannerMapper">
+
+    <resultMap type="BaseBanner" id="BaseBannerResult">
+        <result property="id"    column="id"    />
+        <result property="bannerName"    column="banner_name"    />
+        <result property="bannerCategory"    column="banner_category"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="linkUrl"    column="link_url"    />
+        <result property="sortNum"    column="sort_num"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectBaseBannerVo">
+        select id, banner_name, banner_category, img_url, link_url, sort_num, update_date, create_date from base_banner
+    </sql>
+
+    <select id="selectBaseBannerList" parameterType="BaseBanner" resultMap="BaseBannerResult">
+        <include refid="selectBaseBannerVo"/>
+        <where>
+            <if test="bannerCategory != null  and bannerCategory != ''"> and banner_category = #{bannerCategory}</if>
+        </where>
+        order by sort_num asc
+    </select>
+
+    <select id="selectBaseBannerById" parameterType="String" resultMap="BaseBannerResult">
+        <include refid="selectBaseBannerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseBanner" parameterType="BaseBanner" useGeneratedKeys="true" keyProperty="id">
+        insert into base_banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bannerName != null">banner_name,</if>
+            <if test="bannerCategory != null">banner_category,</if>
+            <if test="imgUrl != null">img_url,</if>
+            <if test="linkUrl != null">link_url,</if>
+            <if test="sortNum != null">sort_num,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bannerName != null">#{bannerName},</if>
+            <if test="bannerCategory != null">#{bannerCategory},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+            <if test="linkUrl != null">#{linkUrl},</if>
+            <if test="sortNum != null">#{sortNum},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseBanner" parameterType="BaseBanner">
+        update base_banner
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bannerName != null">banner_name = #{bannerName},</if>
+            <if test="bannerCategory != null">banner_category = #{bannerCategory},</if>
+            <if test="imgUrl != null">img_url = #{imgUrl},</if>
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="sortNum != null">sort_num = #{sortNum},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseBannerById" parameterType="String">
+        delete from base_banner where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseBannerByIds" parameterType="String">
+        delete from base_banner where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

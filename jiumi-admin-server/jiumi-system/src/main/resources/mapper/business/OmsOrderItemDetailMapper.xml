@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsOrderItemDetailMapper">
+
+    <resultMap type="OmsOrderItemDetail" id="OmsOrderItemDetailResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="consumerType"    column="consumer_type"    />
+        <result property="consumerId"    column="consumer_id"    />
+        <result property="price"    column="price"    />
+        <result property="num"    column="num"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="cardNum"    column="card_num"    />
+        <result property="subType"    column="sub_type"    />
+        <result property="consultant1"    column="consultant1"    />
+        <result property="consultant1Amount"    column="consultant1_amount"    />
+        <result property="consultant2"    column="consultant2"    />
+        <result property="consultant2Amount"    column="consultant2_amount"    />
+        <result property="consultant3"    column="consultant3"    />
+        <result property="consultant3Amount"    column="consultant3_amount"    />
+        <result property="finalAmount"    column="final_amount"    />
+    </resultMap>
+
+    <sql id="selectOmsOrderItemDetailVo">
+        select id, order_id, consumer_type, consumer_id, price, num,card_id, card_num, consultant1, consultant1_amount,
+               consultant2, consultant2_amount, consultant3, consultant3_amount, final_amount,sub_type from oms_order_item_detail
+    </sql>
+
+    <select id="selectOmsOrderItemDetailList" parameterType="OmsOrderItemDetail" resultMap="OmsOrderItemDetailResult">
+        <include refid="selectOmsOrderItemDetailVo"/>
+        <where>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="consumerType != null "> and consumer_type = #{consumerType}</if>
+            <if test="consumerId != null "> and consumer_id = #{consumerId}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="num != null "> and num = #{num}</if>
+            <if test="cardId != null "> and card_id = #{cardId}</if>
+            <if test="cardNum != null "> and card_num = #{cardNum}</if>
+            <if test="consultant1 != null "> and consultant1 = #{consultant1}</if>
+            <if test="consultant1Amount != null "> and consultant1_amount = #{consultant1Amount}</if>
+            <if test="consultant2 != null "> and consultant2 = #{consultant2}</if>
+            <if test="consultant2Amount != null "> and consultant2_amount = #{consultant2Amount}</if>
+            <if test="consultant3 != null "> and consultant3 = #{consultant3}</if>
+            <if test="consultant3Amount != null "> and consultant3_amount = #{consultant3Amount}</if>
+            <if test="finalAmount != null "> and final_amount = #{finalAmount}</if>
+        </where>
+    </select>
+
+    <select id="selectOmsOrderItemDetailById" parameterType="Long" resultMap="OmsOrderItemDetailResult">
+        <include refid="selectOmsOrderItemDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOmsOrderItemDetail" parameterType="OmsOrderItemDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_order_item_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="consumerType != null">consumer_type,</if>
+            <if test="consumerId != null">consumer_id,</if>
+            <if test="price != null">price,</if>
+            <if test="num != null">num,</if>
+            <if test="cardId != null">card_id,</if>
+            <if test="cardNum != null">card_num,</if>
+            <if test="subType != null">sub_type,</if>
+            <if test="consultant1 != null">consultant1,</if>
+            <if test="consultant1Amount != null">consultant1_amount,</if>
+            <if test="consultant2 != null">consultant2,</if>
+            <if test="consultant2Amount != null">consultant2_amount,</if>
+            <if test="consultant3 != null">consultant3,</if>
+            <if test="consultant3Amount != null">consultant3_amount,</if>
+            <if test="finalAmount != null">final_amount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="consumerType != null">#{consumerType},</if>
+            <if test="consumerId != null">#{consumerId},</if>
+            <if test="price != null">#{price},</if>
+            <if test="num != null">#{num},</if>
+            <if test="cardId != null">#{cardId},</if>
+            <if test="cardNum != null">#{cardNum},</if>
+            <if test="subType != null">#{subType},</if>
+            <if test="consultant1 != null">#{consultant1},</if>
+            <if test="consultant1Amount != null">#{consultant1Amount},</if>
+            <if test="consultant2 != null">#{consultant2},</if>
+            <if test="consultant2Amount != null">#{consultant2Amount},</if>
+            <if test="consultant3 != null">#{consultant3},</if>
+            <if test="consultant3Amount != null">#{consultant3Amount},</if>
+            <if test="finalAmount != null">#{finalAmount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsOrderItemDetail" parameterType="OmsOrderItemDetail">
+        update oms_order_item_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="consumerType != null">consumer_type = #{consumerType},</if>
+            <if test="consumerId != null">consumer_id = #{consumerId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="cardId != null">card_id = #{cardId},</if>
+            <if test="cardNum != null">card_num = #{cardNum},</if>
+            <if test="subType != null">sub_type = #{subType},</if>
+            <if test="consultant1 != null">consultant1 = #{consultant1},</if>
+            <if test="consultant1Amount != null">consultant1_amount = #{consultant1Amount},</if>
+            <if test="consultant2 != null">consultant2 = #{consultant2},</if>
+            <if test="consultant2Amount != null">consultant2_amount = #{consultant2Amount},</if>
+            <if test="consultant3 != null">consultant3 = #{consultant3},</if>
+            <if test="consultant3Amount != null">consultant3_amount = #{consultant3Amount},</if>
+            <if test="finalAmount != null">final_amount = #{finalAmount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="backOmsOrderItemDetail" parameterType="Long">
+        insert into oms_order_item_detail_back
+            (id,order_id,consumer_type,consumer_id,price,num,card_id,card_num,sub_type,consultant1,consultant1_amount,
+             consultant2,consultant2_amount,consultant3,consultant3_amount,final_amount,update_time,update_by)
+     select
+         id,order_id,consumer_type,consumer_id,price,num,card_id,card_num,sub_type,consultant1,consultant1_amount,
+         consultant2,consultant2_amount,consultant3,consultant3_amount,final_amount,sysdate(),'撤单操作'
+        from oms_order_item_detail where order_id = #{id}
+    </update>
+
+    <delete id="deleteOmsOrderItemDetailById" parameterType="Long">
+        delete from oms_order_item_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsOrderItemDetailByIds" parameterType="String">
+        delete from oms_order_item_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

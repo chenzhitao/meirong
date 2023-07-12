@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.goods.mapper.BaseNumberCardMapper">
+
+    <resultMap type="BaseNumberCard" id="BaseNumberCardResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="day"    column="day"    />
+        <result property="shopItemId"    column="shop_item_id"    />
+        <result property="num"    column="num"    />
+        <result property="price"    column="price"    />
+        <result property="status"    column="status"    />
+        <result property="goodsTypeId"    column="goods_type_id"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="headImg"    column="head_img"    />
+        <result property="detailsImg"    column="details_img"    />
+        <result property="details"    column="details"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="shopItemName"    column="shopItemName"    />
+    </resultMap>
+
+    <sql id="selectBaseNumberCardVo">
+        select card.id,
+               card.name,
+               card.day,
+               card.shop_item_id,
+               card.num,
+               card.price,
+               card.status,
+               card.goods_type_id,
+               card.introduction,
+               card.head_img,
+               card.details_img,
+               card.details,
+               card.create_time,
+               card.create_by,
+               card.update_time,
+               card.update_by,
+               item.item_price
+        from base_number_card card
+        left join base_shop_item item on card.shop_item_id = item.id
+    </sql>
+
+    <select id="selectBaseNumberCardList" parameterType="BaseNumberCard" resultMap="BaseNumberCardResult">
+        select card.id,
+        card.name,
+        card.day,
+        card.shop_item_id,
+        card.num,
+        card.price,
+        card.status,
+        card.goods_type_id,
+        card.introduction,
+        card.head_img,
+        card.details_img,
+        card.details,
+        card.create_time,
+        card.create_by,
+        card.update_time,
+        card.update_by,
+        item.item_name as shopItemName
+        from base_number_card card
+        left join base_shop_item item on card.shop_item_id = item.id
+        <where>
+            <if test="name != null  and name != ''"> and card.name like concat('%', #{name}, '%')</if>
+            <if test="day != null "> and card.day = #{day}</if>
+            <if test="shopItemId != null "> and card.shop_item_id = #{shopItemId}</if>
+            <if test="num != null "> and card.num = #{num}</if>
+            <if test="price != null "> and card.price = #{price}</if>
+            <if test="status != null  and status != ''"> and card.status = #{status}</if>
+            <if test="goodsTypeId != null "> and card.goods_type_id = #{goodsTypeId}</if>
+            <if test="introduction != null  and introduction != ''"> and card.introduction = #{introduction}</if>
+            <if test="headImg != null  and headImg != ''"> and card.head_img = #{headImg}</if>
+            <if test="detailsImg != null  and detailsImg != ''"> and card.details_img = #{detailsImg}</if>
+            <if test="details != null  and details != ''"> and card.details = #{details}</if>
+        </where>
+        order by  card.shop_item_id asc, card.price asc
+    </select>
+
+    <select id="selectBaseNumberCardById" parameterType="Long" resultMap="BaseNumberCardResult">
+        <include refid="selectBaseNumberCardVo"/>
+        where card.id = #{id}
+    </select>
+
+    <insert id="insertBaseNumberCard" parameterType="BaseNumberCard" useGeneratedKeys="true" keyProperty="id">
+        insert into base_number_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="day != null">day,</if>
+            <if test="shopItemId != null">shop_item_id,</if>
+            <if test="num != null">num,</if>
+            <if test="price != null">price,</if>
+            <if test="status != null">status,</if>
+            <if test="goodsTypeId != null">goods_type_id,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="headImg != null">head_img,</if>
+            <if test="detailsImg != null">details_img,</if>
+            <if test="details != null">details,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="day != null">#{day},</if>
+            <if test="shopItemId != null">#{shopItemId},</if>
+            <if test="num != null">#{num},</if>
+            <if test="price != null">#{price},</if>
+            <if test="status != null">#{status},</if>
+            <if test="goodsTypeId != null">#{goodsTypeId},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="headImg != null">#{headImg},</if>
+            <if test="detailsImg != null">#{detailsImg},</if>
+            <if test="details != null">#{details},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseNumberCard" parameterType="BaseNumberCard">
+        update base_number_card
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="shopItemId != null">shop_item_id = #{shopItemId},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="goodsTypeId != null">goods_type_id = #{goodsTypeId},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="headImg != null">head_img = #{headImg},</if>
+            <if test="detailsImg != null">details_img = #{detailsImg},</if>
+            <if test="details != null">details = #{details},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseNumberCardById" parameterType="Long">
+        delete from base_number_card where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseNumberCardByIds" parameterType="String">
+        delete from base_number_card where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

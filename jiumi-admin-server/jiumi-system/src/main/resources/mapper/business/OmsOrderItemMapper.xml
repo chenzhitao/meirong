@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsOrderItemMapper">
+
+    <resultMap type="OmsOrderItem" id="OmsOrderItemResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="goodsImg"    column="goods_img"    />
+        <result property="productName"    column="product_name"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="skuAttr"    column="sku_attr"    />
+        <result property="goodsNum"    column="goods_num"    />
+        <result property="price"    column="price"    />
+        <result property="skuAttr"    column="sku_name"    />
+    </resultMap>
+
+    <sql id="selectOmsOrderItemVo">
+        SELECT
+                i.id,
+                i.order_id,
+                i.order_code,
+                i.goods_id,
+                i.goods_img,
+                i.product_name,
+                i.sku_id,
+                i.sku_attr,
+                i.goods_num,
+                i.price ,
+                sku.sku_name
+        FROM
+                oms_order_item i
+                        LEFT JOIN oms_goods_sku sku ON i.sku_id = sku.id
+    </sql>
+
+    <select id="selectOmsOrderItemList" parameterType="OmsOrderItem" resultMap="OmsOrderItemResult">
+        <include refid="selectOmsOrderItemVo"/>
+        <where>
+            <if test="orderId != null "> and i.order_id = #{orderId}</if>
+        </where>
+    </select>
+
+    <select id="selectOmsOrderItemById" parameterType="String" resultMap="OmsOrderItemResult">
+        <include refid="selectOmsOrderItemVo"/>
+        where i.id = #{id}
+    </select>
+
+    <insert id="insertOmsOrderItem" parameterType="OmsOrderItem" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_order_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="orderCode != null">order_code,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="goodsImg != null">goods_img,</if>
+            <if test="productName != null">product_name,</if>
+            <if test="skuId != null">sku_id,</if>
+            <if test="skuAttr != null">sku_attr,</if>
+            <if test="goodsNum != null">goods_num,</if>
+            <if test="price != null">price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="goodsImg != null">#{goodsImg},</if>
+            <if test="productName != null">#{productName},</if>
+            <if test="skuId != null">#{skuId},</if>
+            <if test="skuAttr != null">#{skuAttr},</if>
+            <if test="goodsNum != null">#{goodsNum},</if>
+            <if test="price != null">#{price},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsOrderItem" parameterType="OmsOrderItem">
+        update oms_order_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="goodsImg != null">goods_img = #{goodsImg},</if>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="skuId != null">sku_id = #{skuId},</if>
+            <if test="skuAttr != null">sku_attr = #{skuAttr},</if>
+            <if test="goodsNum != null">goods_num = #{goodsNum},</if>
+            <if test="price != null">price = #{price},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOmsOrderItemById" parameterType="String">
+        delete from oms_order_item where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsOrderItemByIds" parameterType="String">
+        delete from oms_order_item where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

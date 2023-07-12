@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.baseconfig.mapper.BaseUserMsgMapper">
+
+    <resultMap type="BaseUserMsg" id="BaseUserMsgResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="msgType"    column="msg_type"    />
+        <result property="msgTitle"    column="msg_title"    />
+        <result property="msgContent"    column="msg_content"    />
+        <result property="msgState"    column="msg_state"    />
+        <result property="msgCreateTime"    column="msg_create_time"    />
+        <result property="msgReadTime"    column="msg_read_time"    />
+    </resultMap>
+
+    <sql id="selectBaseUserMsgVo">
+        select id, user_id, msg_type, msg_title, msg_content, msg_state, msg_create_time, msg_read_time from base_user_msg
+    </sql>
+
+    <select id="selectBaseUserMsgList" parameterType="BaseUserMsg" resultMap="BaseUserMsgResult">
+        <include refid="selectBaseUserMsgVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="msgType != null  and msgType != ''"> and msg_type = #{msgType}</if>
+            <if test="msgState != null  and msgState != ''"> and msg_state = #{msgState}</if>
+        </where>
+        order by msg_create_time desc
+    </select>
+
+    <select id="selectBaseUserMsgById" parameterType="String" resultMap="BaseUserMsgResult">
+        <include refid="selectBaseUserMsgVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseUserMsg" parameterType="BaseUserMsg" useGeneratedKeys="true" keyProperty="id">
+        insert into base_user_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="msgType != null">msg_type,</if>
+            <if test="msgTitle != null">msg_title,</if>
+            <if test="msgContent != null">msg_content,</if>
+            <if test="msgState != null">msg_state,</if>
+            <if test="msgCreateTime != null">msg_create_time,</if>
+            <if test="msgReadTime != null">msg_read_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="msgType != null">#{msgType},</if>
+            <if test="msgTitle != null">#{msgTitle},</if>
+            <if test="msgContent != null">#{msgContent},</if>
+            <if test="msgState != null">#{msgState},</if>
+            <if test="msgCreateTime != null">#{msgCreateTime},</if>
+            <if test="msgReadTime != null">#{msgReadTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseUserMsg" parameterType="BaseUserMsg">
+        update base_user_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="msgType != null">msg_type = #{msgType},</if>
+            <if test="msgTitle != null">msg_title = #{msgTitle},</if>
+            <if test="msgContent != null">msg_content = #{msgContent},</if>
+            <if test="msgState != null">msg_state = #{msgState},</if>
+            <if test="msgCreateTime != null">msg_create_time = #{msgCreateTime},</if>
+            <if test="msgReadTime != null">msg_read_time = #{msgReadTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseUserMsgById" parameterType="String">
+        delete from base_user_msg where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseUserMsgByIds" parameterType="String">
+        delete from base_user_msg where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

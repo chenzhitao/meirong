@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsItemApplyMapper">
+
+    <resultMap type="OmsItemApply" id="OmsItemApplyResult">
+        <result property="id"    column="id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="applyUserId"    column="apply_user_id"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="applyConsultant"    column="apply_consultant"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="userName"    column="user_name"    />
+        <result property="applyConsultantName"    column="applyConsultantName"    />
+        <result property="applyUserName"    column="apply_user_name"    />
+        <result property="applyUserPhone"    column="apply_user_phone"    />
+    </resultMap>
+
+    <sql id="selectOmsItemApplyVo">
+        select id, shop_id, item_id, apply_user_id, apply_time, apply_consultant, status, create_time from oms_item_apply
+    </sql>
+
+    <select id="selectOmsItemApplyList" parameterType="OmsItemApply" resultMap="OmsItemApplyResult">
+        select a.* ,b.shop_name,c.item_name,d.user_name as applyConsultantName,e.nick_name as apply_user_name,e.phonenumber as apply_user_phone
+        from oms_item_apply a
+        left join base_shop_info b on a.shop_id=b.id
+        left join base_shop_item c on a.item_id=c.id
+        left join sys_user d on d.user_id=a.apply_consultant
+        left join sys_user e on e.user_id=a.apply_user_id
+        <where>
+            <if test="shopId != null "> and a.shop_id = #{shopId}</if>
+            <if test="itemId != null "> and a.item_id = #{itemId}</if>
+            <if test="applyUserId != null "> and a.apply_user_id = #{applyUserId}</if>
+            <if test="applyUserName != null "> and e.user_name like  concat('%', #{applyUserName}, '%')</if>
+            <if test="applyConsultant != null "> and a.apply_consultant = #{applyConsultant}</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != '' and params.endApplyTime != null and params.endApplyTime != ''"> and apply_time between #{params.beginApplyTime} and #{params.endApplyTime}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        </where>
+        order by a.apply_time desc
+    </select>
+
+    <select id="selectOmsItemApplyConsultantList" parameterType="OmsItemApply" resultMap="OmsItemApplyResult">
+        select a.* ,b.shop_name,c.item_name,d.user_name as applyConsultantName,e.user_name as apply_user_name,e.phonenumber as apply_user_phone
+        from oms_item_apply a
+        left join base_shop_info b on a.shop_id=b.id
+        left join base_shop_item c on a.item_id=c.id
+        left join sys_user d on d.user_id=a.apply_consultant
+        left join sys_user e on e.user_id=a.apply_user_id
+        <where>
+            <if test="shopId != null "> and a.shop_id = #{shopId}</if>
+            <if test="itemId != null "> and a.item_id = #{itemId}</if>
+            <if test="applyUserId != null "> and a.apply_user_id = #{applyUserId}</if>
+            <if test="applyUserName != null "> and e.user_name like  concat('%', #{applyUserName}, '%')</if>
+            <if test="applyConsultant != null "> and a.apply_consultant = #{applyConsultant}</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != '' and params.endApplyTime != null and params.endApplyTime != ''"> and apply_time between #{params.beginApplyTime} and #{params.endApplyTime}</if>
+            <if test="status != null  and status != ''"> and a.status in (${status})</if>
+        </where>
+        order by a.apply_time desc
+    </select>
+
+    <select id="selectOmsItemApplyById" parameterType="String" resultMap="OmsItemApplyResult">
+        select a.*,b.shop_name ,c.item_name from oms_item_apply a
+         left join base_shop_info b on a.shop_id=b.id
+         left join base_shop_item c on a.item_id=c.id
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertOmsItemApply" parameterType="OmsItemApply" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_item_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shop_id,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="applyUserId != null">apply_user_id,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="applyConsultant != null">apply_consultant,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="applyUserId != null">#{applyUserId},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="applyConsultant != null">#{applyConsultant},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsItemApply" parameterType="OmsItemApply">
+        update oms_item_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="applyUserId != null">apply_user_id = #{applyUserId},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="applyConsultant != null">apply_consultant = #{applyConsultant},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="selectOmsOrderUnRevsiveList">
+        update oms_item_apply set status='04'
+        where status = '01' and apply_time <![CDATA[ <= ]]> now()
+    </update>
+
+    <delete id="deleteOmsItemApplyById" parameterType="String">
+        delete from oms_item_apply where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsItemApplyByIds" parameterType="String">
+        delete from oms_item_apply where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

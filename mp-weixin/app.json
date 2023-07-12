@@ -1,0 +1,104 @@
+{
+  "pages": [
+    "pages/example/index",
+    "pages/example/btn",
+    "pages/example/classify",
+    "pages/example/cart",
+    "pages/example/my",
+    "pages/common/login",
+    "pages/common/text",
+    "pages/common/case",
+    "pages/common/pay-success",
+    "pages/common/add-phone",
+    "pages/common/case-detail",
+    "uview-ui/components/u-avatar-cropper/u-avatar-cropper"
+  ],
+  "subPackages": [
+    {
+      "root": "pages/goods",
+      "pages": [
+        "detail/index",
+        "order/preview",
+        "order/index",
+        "order/detail",
+        "order/flow"
+      ]
+    },
+    {
+      "root": "pages/project",
+      "pages": [
+        "detail/index",
+        "index",
+        "order/preview",
+        "order/index",
+        "order/make",
+        "order/detail"
+      ]
+    },
+    {
+      "root": "pages/my",
+      "pages": [
+        "address/index",
+        "address/edit",
+        "message/index",
+        "contact/index",
+        "info",
+        "wallet/index",
+        "wallet/apply",
+        "invite/index",
+        "invite/commission-log"
+      ]
+    },
+    {
+      "root": "pages/card",
+      "pages": [
+        "detail/index",
+        "order/preview"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uView",
+    "navigationBarBackgroundColor": "#F5F5F5",
+    "backgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "color": "#909399",
+    "selectedColor": "#B29190",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/example/index",
+        "iconPath": "static/uview/example/index.png",
+        "selectedIconPath": "static/uview/example/index_select.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/example/classify",
+        "iconPath": "static/uview/example/classify.png",
+        "selectedIconPath": "static/uview/example/classify_select.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/example/cart",
+        "iconPath": "static/uview/example/cart.png",
+        "selectedIconPath": "static/uview/example/cart_select.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/example/my",
+        "iconPath": "static/uview/example/my.png",
+        "selectedIconPath": "static/uview/example/my_select.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "usingComponents": {}
+}

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "预约提交",
+  "usingComponents": {
+    "u-card": "/uview-ui/components/u-card/u-card",
+    "u-line": "/uview-ui/components/u-line/u-line",
+    "u-button": "/uview-ui/components/u-button/u-button"
+  }
+}

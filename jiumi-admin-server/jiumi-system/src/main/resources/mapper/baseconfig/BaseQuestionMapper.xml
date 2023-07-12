@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.baseconfig.mapper.BaseQuestionMapper">
+
+    <resultMap type="BaseQuestion" id="BaseQuestionResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="remark"    column="remark"    />
+        <result property="words"    column="words"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="sortNo"    column="sort_no"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseQuestionVo">
+        select id, title, remark, words, content, status, sort_no, create_by, create_time, update_by, update_time from base_question
+    </sql>
+
+    <select id="selectBaseQuestionList" parameterType="BaseQuestion" resultMap="BaseQuestionResult">
+        <include refid="selectBaseQuestionVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseQuestionById" parameterType="String" resultMap="BaseQuestionResult">
+        <include refid="selectBaseQuestionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseQuestion" parameterType="BaseQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into base_question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="remark != null">remark,</if>
+            <if test="words != null">words,</if>
+            <if test="content != null">content,</if>
+            <if test="status != null">status,</if>
+            <if test="sortNo != null">sort_no,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="words != null">#{words},</if>
+            <if test="content != null">#{content},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sortNo != null">#{sortNo},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseQuestion" parameterType="BaseQuestion">
+        update base_question
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="words != null">words = #{words},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sortNo != null">sort_no = #{sortNo},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseQuestionById" parameterType="String">
+        delete from base_question where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseQuestionByIds" parameterType="String">
+        delete from base_question where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

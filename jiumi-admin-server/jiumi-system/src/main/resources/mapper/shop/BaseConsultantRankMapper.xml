@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.shop.mapper.BaseConsultantRankMapper">
+
+    <resultMap type="BaseConsultantRank" id="BaseConsultantRankResult">
+        <result property="levelId"    column="level_id"    />
+        <result property="levelName"    column="level_name"    />
+        <result property="commissionRatio"    column="commission_ratio"    />
+        <result property="useFlag"    column="use_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBaseConsultantRankVo">
+        select level_id, level_name, commission_ratio, use_flag, create_by, create_time from base_consultant_rank
+    </sql>
+
+    <select id="selectBaseConsultantRankList" parameterType="BaseConsultantRank" resultMap="BaseConsultantRankResult">
+        <include refid="selectBaseConsultantRankVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectBaseConsultantRankByLevelId" parameterType="Long" resultMap="BaseConsultantRankResult">
+        <include refid="selectBaseConsultantRankVo"/>
+        where level_id = #{levelId}
+    </select>
+
+    <insert id="insertBaseConsultantRank" parameterType="BaseConsultantRank" useGeneratedKeys="true" keyProperty="levelId">
+        insert into base_consultant_rank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="levelName != null">level_name,</if>
+            <if test="commissionRatio != null">commission_ratio,</if>
+            <if test="useFlag != null">use_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="levelName != null">#{levelName},</if>
+            <if test="commissionRatio != null">#{commissionRatio},</if>
+            <if test="useFlag != null">#{useFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseConsultantRank" parameterType="BaseConsultantRank">
+        update base_consultant_rank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="levelName != null">level_name = #{levelName},</if>
+            <if test="commissionRatio != null">commission_ratio = #{commissionRatio},</if>
+            <if test="useFlag != null">use_flag = #{useFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where level_id = #{levelId}
+    </update>
+
+    <delete id="deleteBaseConsultantRankByLevelId" parameterType="Long">
+        delete from base_consultant_rank where level_id = #{levelId}
+    </delete>
+
+    <delete id="deleteBaseConsultantRankByLevelIds" parameterType="String">
+        delete from base_consultant_rank where level_id in
+        <foreach item="levelId" collection="array" open="(" separator="," close=")">
+            #{levelId}
+        </foreach>
+    </delete>
+</mapper>

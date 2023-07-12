@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsVipInfoMapper">
+
+    <resultMap type="OmsVipInfo" id="OmsVipInfoResult">
+        <result property="vipLevel"    column="vip_level"    />
+        <result property="vipName"    column="vip_name"    />
+        <result property="rechargeAmount"    column="recharge_amount"    />
+        <result property="discount"    column="discount"    />
+        <result property="vipImg"    column="vip_img"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectOmsVipInfoVo">
+        select vip_level, vip_name, recharge_amount, discount, vip_img, remark, status from oms_vip_info
+    </sql>
+
+    <select id="selectOmsVipInfoList" parameterType="OmsVipInfo" resultMap="OmsVipInfoResult">
+        <include refid="selectOmsVipInfoVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectOmsVipInfoByVipLevel" parameterType="Long" resultMap="OmsVipInfoResult">
+        <include refid="selectOmsVipInfoVo"/>
+        where vip_level = #{vipLevel} and status='Y'
+    </select>
+
+    <insert id="insertOmsVipInfo" parameterType="OmsVipInfo">
+        insert into oms_vip_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vipLevel != null">vip_level,</if>
+            <if test="vipName != null">vip_name,</if>
+            <if test="rechargeAmount != null">recharge_amount,</if>
+            <if test="discount != null">discount,</if>
+            <if test="vipImg != null">vip_img,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vipLevel != null">#{vipLevel},</if>
+            <if test="vipName != null">#{vipName},</if>
+            <if test="rechargeAmount != null">#{rechargeAmount},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="vipImg != null">#{vipImg},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsVipInfo" parameterType="OmsVipInfo">
+        update oms_vip_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vipName != null">vip_name = #{vipName},</if>
+            <if test="rechargeAmount != null">recharge_amount = #{rechargeAmount},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="vipImg != null">vip_img = #{vipImg},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where vip_level = #{vipLevel}
+    </update>
+
+    <delete id="deleteOmsVipInfoByVipLevel" parameterType="Long">
+        delete from oms_vip_info where vip_level = #{vipLevel}
+    </delete>
+
+    <delete id="deleteOmsVipInfoByVipLevels" parameterType="String">
+        delete from oms_vip_info where vip_level in
+        <foreach item="vipLevel" collection="array" open="(" separator="," close=")">
+            #{vipLevel}
+        </foreach>
+    </delete>
+</mapper>

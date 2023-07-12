@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.goods.mapper.OmsGoodsTypeMapper">
+
+    <resultMap type="OmsGoodsType" id="OmsGoodsTypeResult">
+        <result property="id"    column="id"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="typeDesc"    column="type_desc"    />
+        <result property="goodsNum"    column="goods_num"    />
+        <result property="status"    column="status"    />
+        <result property="sortNo"    column="sort_no"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectOmsGoodsTypeVo">
+        select
+                id,
+                type_name,
+                type_desc,
+                ( (select
+                           count(1) from oms_goods_info g
+                   where
+                           g.type_id = t.id)
+                        ) goods_num,
+                status,
+                sort_no,
+                create_time,
+                create_by
+        from
+                oms_goods_type t
+    </sql>
+
+    <select id="selectOmsGoodsTypeList" parameterType="OmsGoodsType" resultMap="OmsGoodsTypeResult">
+        <include refid="selectOmsGoodsTypeVo"/>
+        <where>
+            <if test="typeName != null  and typeName != ''"> and t.type_name like concat('%', #{typeName}, '%')</if>
+            <if test="status != null  and status != ''"> and t.status = #{status}</if>
+        </where>
+        order by t.sort_no asc
+    </select>
+
+    <select id="selectOmsGoodsTypeById" parameterType="String" resultMap="OmsGoodsTypeResult">
+        <include refid="selectOmsGoodsTypeVo"/>
+        where t.id = #{id}
+    </select>
+
+    <insert id="insertOmsGoodsType" parameterType="OmsGoodsType" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_goods_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeName != null">type_name,</if>
+            <if test="typeDesc != null">type_desc,</if>
+            <if test="goodsNum != null">goods_num,</if>
+            <if test="status != null">status,</if>
+            <if test="sortNo != null">sort_no,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeName != null">#{typeName},</if>
+            <if test="typeDesc != null">#{typeDesc},</if>
+            <if test="goodsNum != null">#{goodsNum},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sortNo != null">#{sortNo},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsGoodsType" parameterType="OmsGoodsType">
+        update oms_goods_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeName != null">type_name = #{typeName},</if>
+            <if test="typeDesc != null">type_desc = #{typeDesc},</if>
+            <if test="goodsNum != null">goods_num = #{goodsNum},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sortNo != null">sort_no = #{sortNo},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOmsGoodsTypeById" parameterType="String">
+        delete from oms_goods_type where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsGoodsTypeByIds" parameterType="String">
+        delete from oms_goods_type where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

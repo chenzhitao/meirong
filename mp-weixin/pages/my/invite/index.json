@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "我的邀请",
+  "usingComponents": {
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-button": "/uview-ui/components/u-button/u-button",
+    "u-parse": "/uview-ui/components/u-parse/u-parse",
+    "u-avatar": "/uview-ui/components/u-avatar/u-avatar",
+    "u-icon": "/uview-ui/components/u-icon/u-icon",
+    "u-toast": "/uview-ui/components/u-toast/u-toast",
+    "u-skeleton": "/uview-ui/components/u-skeleton/u-skeleton"
+  }
+}

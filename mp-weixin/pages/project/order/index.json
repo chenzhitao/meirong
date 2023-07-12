@@ -1,0 +1,16 @@
+{
+  "navigationBarTitleText": "我的预约",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "u-subsection": "/uview-ui/components/u-subsection/u-subsection",
+    "u-card": "/uview-ui/components/u-card/u-card",
+    "u-empty": "/uview-ui/components/u-empty/u-empty",
+    "u-modal": "/uview-ui/components/u-modal/u-modal",
+    "u-form": "/uview-ui/components/u-form/u-form",
+    "u-form-item": "/uview-ui/components/u-form-item/u-form-item",
+    "u-input": "/uview-ui/components/u-input/u-input",
+    "u-picker": "/uview-ui/components/u-picker/u-picker",
+    "u-loadmore": "/uview-ui/components/u-loadmore/u-loadmore",
+    "u-toast": "/uview-ui/components/u-toast/u-toast"
+  }
+}

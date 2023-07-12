@@ -1,0 +1,1 @@
+<view class="flow flex flex-direction justify-center align-center"><u-avatar vue-id="25398905-1" src="/static/uview/common/login.png" mode="square" size="250" bind:__l="__l"></u-avatar><view class="u-m-t-30 flex text-center"><view>{{"物流快递："+info.logisticsType}}</view><view class="u-m-l-20">{{"物流编号："+info.logisticsCode}}</view></view></view>

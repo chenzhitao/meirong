@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.finance.mapper.UserWithdrawDetailMapper">
+
+    <resultMap type="UserWithdrawDetail" id="UserWithdrawDetailResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="alipayAccount"    column="alipay_account"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankAccount"    column="bank_account"    />
+        <result property="accountAmount"    column="account_amount"    />
+        <result property="withdrawAmount"    column="withdraw_amount"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="applyStatus"    column="apply_status"    />
+        <result property="approveUser"    column="approve_user"    />
+        <result property="approveTime"    column="approve_time"    />
+        <result property="backReason"    column="back_reason"    />
+        <result property="paymentTime"    column="payment_time"    />
+        <result property="paymentUser"    column="payment_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserWithdrawDetailVo">
+        select id, user_id, user_name, account_amount, withdraw_amount, apply_time, apply_status,
+               approve_user, approve_time, back_reason, create_by, create_time, update_by,
+               update_time,payment_time,payment_user,pay_type,alipay_account,bank_name,bank_account
+        from user_withdraw_detail
+    </sql>
+
+    <select id="selectUserWithdrawDetailList" parameterType="UserWithdrawDetail" resultMap="UserWithdrawDetailResult">
+        <include refid="selectUserWithdrawDetailVo"/>
+        <where>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="params.beginApplyTime != null and params.beginApplyTime != '' and params.endApplyTime != null and params.endApplyTime != ''"> and apply_time between #{params.beginApplyTime} and #{params.endApplyTime}</if>
+            <if test="applyStatus != null  and applyStatus != ''"> and apply_status = #{applyStatus}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+        </where>
+        order by apply_time desc
+    </select>
+
+    <select id="selectUserWithdrawDetailById" parameterType="Long" resultMap="UserWithdrawDetailResult">
+        <include refid="selectUserWithdrawDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertUserWithdrawDetail" parameterType="UserWithdrawDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into user_withdraw_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="alipayAccount != null">alipay_account,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="bankAccount != null">bank_account,</if>
+            <if test="accountAmount != null">account_amount,</if>
+            <if test="withdrawAmount != null">withdraw_amount,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="applyStatus != null">apply_status,</if>
+            <if test="approveUser != null">approve_user,</if>
+            <if test="approveTime != null">approve_time,</if>
+            <if test="backReason != null">back_reason,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="alipayAccount != null">#{alipayAccount},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="bankAccount != null">#{bankAccount},</if>
+            <if test="accountAmount != null">#{accountAmount},</if>
+            <if test="withdrawAmount != null">#{withdrawAmount},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="applyStatus != null">#{applyStatus},</if>
+            <if test="approveUser != null">#{approveUser},</if>
+            <if test="approveTime != null">#{approveTime},</if>
+            <if test="backReason != null">#{backReason},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserWithdrawDetail" parameterType="UserWithdrawDetail">
+        update user_withdraw_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="payType != null">pay_type=#{payType},</if>
+            <if test="alipayAccount != null">alipay_account=#{alipayAccount},</if>
+            <if test="bankName != null">bank_name=#{bankName},</if>
+            <if test="bankAccount != null">bank_account=#{bankAccount},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="applyStatus != null">apply_status = #{applyStatus},</if>
+            <if test="approveUser != null">approve_user = #{approveUser},</if>
+            <if test="approveTime != null">approve_time = #{approveTime},</if>
+            <if test="backReason != null">back_reason = #{backReason},</if>
+            <if test="paymentUser != null">payment_user = #{paymentUser},</if>
+            <if test="paymentTime != null">payment_time = #{paymentTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserWithdrawDetailById" parameterType="Long">
+        delete from user_withdraw_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteUserWithdrawDetailByIds" parameterType="String">
+        delete from user_withdraw_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

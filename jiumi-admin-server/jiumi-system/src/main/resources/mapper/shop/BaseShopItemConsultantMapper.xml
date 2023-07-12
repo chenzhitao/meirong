@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.shop.mapper.BaseShopItemConsultantMapper">
+
+    <resultMap type="BaseShopItemConsultant" id="BaseShopItemConsultantResult">
+        <result property="id"    column="id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="itemId"    column="item_id"    />
+        <result property="consultantId"    column="consultant_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBaseShopItemConsultantVo">
+        select id, shop_id, item_id, consultant_id, create_time from base_shop_item_consultant
+    </sql>
+
+    <select id="selectBaseShopItemConsultantList" parameterType="BaseShopItemConsultant" resultMap="BaseShopItemConsultantResult">
+        <include refid="selectBaseShopItemConsultantVo"/>
+        <where>
+            <if test="shopId != null "> and shop_id in (${shopId})</if>
+            <if test="itemId != null "> and item_id = #{itemId}</if>
+        </where>
+    </select>
+
+    <select id="selectConsultantListStr"  resultMap="BaseShopItemConsultantResult">
+        select GROUP_CONCAT(user_id) as consultant_id from sys_user_role where role_id=101
+    </select>
+
+    <select id="selectBaseShopItemConsultantById" parameterType="String" resultMap="BaseShopItemConsultantResult">
+        <include refid="selectBaseShopItemConsultantVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBaseShopItemConsultantByItemId" parameterType="String" resultMap="BaseShopItemConsultantResult">
+        select  a.shop_id,b.shop_name,a.consultant_id from base_shop_item_consultant a
+        left join base_shop_info b on a.shop_id=b.id
+        where a.item_id= #{id}
+    </select>
+
+    <insert id="insertBaseShopItemConsultant" parameterType="BaseShopItemConsultant" useGeneratedKeys="true" keyProperty="id">
+        insert into base_shop_item_consultant
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shop_id,</if>
+            <if test="itemId != null">item_id,</if>
+            <if test="consultantId != null">consultant_id,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="consultantId != null">#{consultantId},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseShopItemConsultant" parameterType="BaseShopItemConsultant">
+        update base_shop_item_consultant
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="itemId != null">item_id = #{itemId},</if>
+            <if test="consultantId != null">consultant_id = #{consultantId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseShopItemConsultantById" parameterType="String">
+        delete from base_shop_item_consultant where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseShopItemConsultantByIds" parameterType="String">
+        delete from base_shop_item_consultant where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBaseShopItemConsultantByShopId">
+        delete from base_shop_item_consultant where shop_id = #{shopId}
+    </delete>
+
+    <insert id="insertBatchBaseShopItemConsultant">
+        insert into base_shop_item_consultant(  shop_id,  item_id,  consultant_id,   create_time   ) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.shopId}, #{item.itemId}, #{item.consultantId}, now())
+        </foreach>
+    </insert>
+</mapper>

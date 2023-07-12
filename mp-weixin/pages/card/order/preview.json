@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "订单支付",
+  "usingComponents": {
+    "u-card": "/uview-ui/components/u-card/u-card",
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-line": "/uview-ui/components/u-line/u-line",
+    "pay-type": "/components/pay-type/pay-type",
+    "u-capsule-btn": "/uview-ui/components/u-capsule-btn/u-capsule-btn",
+    "u-toast": "/uview-ui/components/u-toast/u-toast"
+  }
+}

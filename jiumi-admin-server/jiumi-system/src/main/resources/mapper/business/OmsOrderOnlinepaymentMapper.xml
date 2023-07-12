@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsOrderOnlinepaymentMapper">
+
+    <resultMap type="OmsOrderInfo" id="OmsOrderInfoResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="productName"    column="product_name"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="outTradeNo"    column="out_trade_no"    />
+        <result property="orderType"    column="order_type"    />
+        <result property="orderAmount"    column="order_amount"    />
+        <result property="freightAmount"    column="freight_amount"    />
+        <result property="sumAmount"    column="sum_amount"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="logisticsCode"    column="logistics_code"    />
+        <result property="logisticsType"    column="logistics_type"    />
+        <result property="takeUser"    column="take_user"    />
+        <result property="takePhone"    column="take_phone"    />
+        <result property="takeAddress"    column="take_address"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="consumeType" column="consume_type"/>
+    </resultMap>
+
+    <sql id="selectOnlinpaymentVo">
+        select id, user_id, user_name,pay_type,  consume_type, product_name, order_code,
+               order_time, out_trade_no, order_type, order_amount, freight_amount, sum_amount,
+               pay_time, order_status, logistics_code, logistics_type, take_user, take_phone,
+               take_address, create_time, create_by, update_time, update_by from oms_order_info
+
+    </sql>
+
+    <select id="selectOnlinpaymentList" parameterType="OmsOrderInfo" resultMap="OmsOrderInfoResult">
+        <include refid="selectOnlinpaymentVo"/>
+        <where>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="orderCode != null  and orderCode != ''"> and order_code = #{orderCode}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="orderTime != null ">and  date_format(order_time,'%y%m%d') = date_format(#{orderTime},'%y%m%d')</if>
+            <if test="outTradeNo != null  and outTradeNo != ''"> and out_trade_no = #{outTradeNo}</if>
+            <if test="orderStatus != null  and orderStatus != ''"> and order_status = #{orderStatus}</if>
+            <if test="consumeType != null  and consumeType != ''"> and consume_type = #{consumeType}</if>
+        </where>
+        order by order_time desc
+    </select>
+
+    <select id="selectOnlinpaymentById" parameterType="String" resultMap="OmsOrderInfoResult">
+        <include refid="selectOnlinpaymentVo"/>
+        where   id = #{id}
+    </select>
+
+</mapper>

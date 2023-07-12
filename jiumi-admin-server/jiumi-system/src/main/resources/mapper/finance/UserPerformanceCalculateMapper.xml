@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.finance.mapper.UserPerformanceCalculateMapper">
+
+    <resultMap type="UserPerformanceCalculate" id="UserPerformanceCalculateResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="orderAmount"    column="order_amount"    />
+        <result property="orderRemark"    column="order_remark"    />
+        <result property="itemAmount"    column="item_amount"    />
+        <result property="productAmount"    column="product_amount"    />
+        <result property="sumAmount"    column="sum_amount"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserPerformanceCalculateVo">
+        select id, user_id, user_name, user_phone, shop_id, order_id, shop_name, order_code, pay_time, order_amount, order_remark, item_amount, product_amount, sum_amount, create_by, create_time, update_by, update_time from user_performance_calculate
+    </sql>
+
+    <select id="selectUserPerformanceCalculateList" parameterType="UserPerformanceCalculate" resultMap="UserPerformanceCalculateResult">
+        <include refid="selectUserPerformanceCalculateVo"/>
+        <where>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="userPhone != null  and userPhone != ''"> and user_phone = #{userPhone}</if>
+            <if test="shopId != null "> and shop_id=#{shopId}</if>
+            <if test="shopName != null "> and shop_name  concat('%', #{shopName}, '%')</if>
+            <if test="orderCode != null  and orderCode != ''"> and order_code = #{orderCode}</if>
+            <if test="payTime != null "> and pay_time = #{payTime}</if>
+        </where>
+    </select>
+
+    <select id="selectUserPerformanceCalculateById" parameterType="Long" resultMap="UserPerformanceCalculateResult">
+        <include refid="selectUserPerformanceCalculateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertUserPerformanceCalculate" parameterType="UserPerformanceCalculate" useGeneratedKeys="true" keyProperty="id">
+        insert into user_performance_calculate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="userPhone != null">user_phone,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="shopName != null">shop_name,</if>
+            <if test="orderCode != null">order_code,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="orderAmount != null">order_amount,</if>
+            <if test="orderRemark != null">order_remark,</if>
+            <if test="itemAmount != null">item_amount,</if>
+            <if test="productAmount != null">product_amount,</if>
+            <if test="sumAmount != null">sum_amount,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="userPhone != null">#{userPhone},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="shopName != null">#{shopName},</if>
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="orderAmount != null">#{orderAmount},</if>
+            <if test="orderRemark != null">#{orderRemark},</if>
+            <if test="itemAmount != null">#{itemAmount},</if>
+            <if test="productAmount != null">#{productAmount},</if>
+            <if test="sumAmount != null">#{sumAmount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserPerformanceCalculate" parameterType="UserPerformanceCalculate">
+        update user_performance_calculate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="userPhone != null">user_phone = #{userPhone},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="shopName != null">shop_name = #{shopName},</if>
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="orderAmount != null">order_amount = #{orderAmount},</if>
+            <if test="orderRemark != null">order_remark = #{orderRemark},</if>
+            <if test="itemAmount != null">item_amount = #{itemAmount},</if>
+            <if test="productAmount != null">product_amount = #{productAmount},</if>
+            <if test="sumAmount != null">sum_amount = #{sumAmount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserPerformanceCalculateById" parameterType="Long">
+        delete from user_performance_calculate where id = #{id}
+    </delete>
+
+  <delete id="deleteUserPerformanceCalculateByOrderId" parameterType="Long">
+        delete from user_performance_calculate where order_id = #{id}
+    </delete>
+
+    <delete id="deleteUserPerformanceCalculateByIds" parameterType="String">
+        delete from user_performance_calculate where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

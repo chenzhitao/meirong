@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.finance.mapper.UserNumberCardDetailMapper">
+
+    <resultMap type="UserNumberCardDetail" id="UserNumberCardDetailResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="cardName"    column="cardName"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="buyTime"    column="buy_time"    />
+        <result property="beginTime"    column="begin_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="totalTimes"    column="total_times"    />
+        <result property="useTimes"    column="use_times"    />
+        <result property="lastTimes"    column="last_times"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="itemName"    column="item_name"    />
+        <result property="orderCode"    column="order_code"    />
+    </resultMap>
+
+    <sql id="selectUserNumberCardDetailVo">
+        select id, user_id, card_id, buy_time, begin_time, end_time, total_times,
+               use_times, last_times, create_by, create_time, update_by, update_time,order_code
+        from user_number_card_detail
+    </sql>
+
+    <select id="selectUserNumberCardDetailList" parameterType="UserNumberCardDetail" resultMap="UserNumberCardDetailResult">
+        SELECT a.*,CONCAT(b.nick_name,'[',b.phonenumber,']') as user_phone,c.name as cardName FROM `user_number_card_detail` a
+        left join sys_user b on a.user_id=b.user_id
+        left join base_number_card c on a.card_id=c.id
+        <where>
+            <if test="cardId != null "> and a.card_id = #{cardId}</if>
+            <if test="userPhone != null "> and b.phonenumber like concat('%', #{userPhone}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(a.buy_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(a.buy_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by a.buy_time desc
+    </select>
+
+    <select id="selectUserNumberCardDetailListByItemId" parameterType="UserNumberCardDetail" resultMap="UserNumberCardDetailResult">
+        select a.name as cardName, b.id, b.card_id,b.total_times,b.use_times, b.last_times from base_number_card a
+        left join user_number_card_detail b on a.id=b.card_id
+        where a.`status`='01' and b.user_id=#{userId} and a.shop_item_id=#{id}
+        and b.last_times>0 and b.begin_time <![CDATA[ < ]]> now() and b.end_time <![CDATA[ > ]]> now()
+    </select>
+
+    <select id="selectUserNumberCardDetailListByUserId" parameterType="UserNumberCardDetail" resultMap="UserNumberCardDetailResult">
+        select a.name as cardName, b.id, b.card_id,b.total_times,b.use_times, b.last_times,c.item_name from base_number_card a
+        left join user_number_card_detail b on a.id=b.card_id
+        left join base_shop_item c on c.id=a.shop_item_id
+        where a.`status`='01' and b.user_id=#{userId}
+        and b.last_times>0 and b.begin_time <![CDATA[ < ]]> now() and b.end_time <![CDATA[ > ]]> now()
+    </select>
+
+    <select id="selectUserNumberCardDetailById" parameterType="Long" resultMap="UserNumberCardDetailResult">
+        <include refid="selectUserNumberCardDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertUserNumberCardDetail" parameterType="UserNumberCardDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into user_number_card_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="cardId != null">card_id,</if>
+            <if test="buyTime != null">buy_time,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="totalTimes != null">total_times,</if>
+            <if test="useTimes != null">use_times,</if>
+            <if test="lastTimes != null">last_times,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="orderCode != null">order_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="cardId != null">#{cardId},</if>
+            <if test="buyTime != null">#{buyTime},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="totalTimes != null">#{totalTimes},</if>
+            <if test="useTimes != null">#{useTimes},</if>
+            <if test="lastTimes != null">#{lastTimes},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="orderCode != null">#{orderCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserNumberCardDetail" parameterType="UserNumberCardDetail">
+        update user_number_card_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="cardId != null">card_id = #{cardId},</if>
+            <if test="buyTime != null">buy_time = #{buyTime},</if>
+            <if test="beginTime != null">begin_time = #{beginTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="totalTimes != null">total_times = #{totalTimes},</if>
+            <if test="useTimes != null">use_times = #{useTimes},</if>
+            <if test="lastTimes != null">last_times = #{lastTimes},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserNumberCardDetailById" parameterType="Long">
+        delete from user_number_card_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteUserNumberCardDetailByIds" parameterType="String">
+        delete from user_number_card_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "购物车",
+  "usingComponents": {
+    "u-empty": "/uview-ui/components/u-empty/u-empty",
+    "u-swipe-action": "/uview-ui/components/u-swipe-action/u-swipe-action",
+    "u-icon": "/uview-ui/components/u-icon/u-icon",
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-number-box": "/uview-ui/components/u-number-box/u-number-box",
+    "u-capsule-btn": "/uview-ui/components/u-capsule-btn/u-capsule-btn",
+    "u-modal": "/uview-ui/components/u-modal/u-modal",
+    "pay-type": "/components/pay-type/pay-type"
+  }
+}

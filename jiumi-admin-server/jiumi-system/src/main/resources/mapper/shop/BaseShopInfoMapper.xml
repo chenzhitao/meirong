@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.shop.mapper.BaseShopInfoMapper">
+
+    <resultMap type="BaseShopInfo" id="BaseShopInfoResult">
+        <result property="id"    column="id"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="shopDetail"    column="shop_detail"    />
+        <result property="address"    column="address"    />
+        <result property="contact"    column="contact"    />
+        <result property="phone"    column="phone"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <collection property="baseShopItemConsultantList" ofType="com.jiumi.shop.domain.BaseShopItemConsultant">
+            <result property="id" column="item_consultant_id"></result>
+            <result property="shopId" column="shop_id"></result>
+            <result property="itemId" column="item_id"></result>
+            <result property="consultantId" column="consultant_id"></result>
+         </collection>
+    </resultMap>
+
+    <resultMap type="BaseAnalyiseVo" id="BaseAnalyiseVoResult">
+        <result property="id"    column="id"    />
+        <result property="shopIdStr"    column="shopIdStr"    />
+        <result property="beginTime"    column="beginTime"    />
+        <result property="endTime"    column="endTime"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="addNumD"    column="addNumD"    />
+        <result property="buyNumD"    column="buyNumD"    />
+        <result property="buyAmountD"    column="buyAmountD"    />
+        <result property="chargeAmountD"    column="chargeAmountD"    />
+        <result property="addNumM"    column="addNumM"    />
+        <result property="buyNumM"    column="buyNumM"    />
+        <result property="buyAmountM"    column="buyAmountM"    />
+        <result property="chargeAmountM"    column="chargeAmountM"    />
+    </resultMap>
+
+    <sql id="selectBaseShopInfoVo">
+        select shop.id, shop_name, shop_detail, address, contact, phone, status,
+             shop.create_time, create_by, update_time, update_by ,item.id item_consultant_id,
+            item.shop_id ,item.item_id,item.consultant_id
+        from base_shop_info shop left join
+               base_shop_item_consultant item on shop.id = item.shop_id
+    </sql>
+
+    <select id="selectBaseShopInfoList" parameterType="BaseShopInfo" resultMap="BaseShopInfoResult">
+        select shop.id, shop_name, shop_detail, address, contact, phone, status,
+        shop.create_time, create_by, update_time, update_by
+        from base_shop_info shop
+        <where>
+            <if test="status != null  and status != ''"> and shop.status =#{status}</if>
+            <if test="shopName != null  and shopName != ''"> and shop.shop_name like concat('%', #{shopName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="getShopAnalysisData" parameterType="BaseAnalyiseVo" resultMap="BaseAnalyiseVoResult">
+        select d.shop_name,count(1) as buyNumD,sum(c.order_amount) as buyAmountD from(
+         select a.shop_id, a.order_amount,a.pay_time from oms_order_info a where  a.order_status='02'
+         union all select b.shop_id,b.sum_amount,b.pay_time as order_amount from oms_order_item_info b where b.order_status='02'
+        )c
+         left join base_shop_info d on c.shop_id=d.id
+        where c.pay_time BETWEEN date_format(#{beginTime},'%Y-%m-%d %H:%i:%s') and date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+          and d.shop_name is not null
+        group by shop_id
+    </select>
+
+    <select id="getShopAnalysisAddData" parameterType="BaseAnalyiseVo" resultMap="BaseAnalyiseVoResult">
+        select a.source_shop as id,b.shop_name,count(1) as addNumD  from sys_user a
+        left join base_shop_info b on a.source_shop=b.id
+        where user_type='02'
+          and a.create_time
+          and a.source_shop is not null
+          and a.create_time BETWEEN date_format(#{beginTime},'%Y-%m-%d %H:%i:%s') and date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+        group by a.source_shop
+    </select>
+
+    <select id="getShopAnalysisChargeData" parameterType="BaseAnalyiseVo" resultMap="BaseAnalyiseVoResult">
+        select b.source_shop as id,c.shop_name,sum(a.recharge_amount) as chargeAmountD from user_recharge_detail a
+        left join sys_user b on a.user_id=b.user_id
+        left join base_shop_info c on b.source_shop=c.id
+        where a.recharge_time BETWEEN date_format(#{beginTime},'%Y-%m-%d %H:%i:%s') and date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+        group by b.source_shop
+    </select>
+
+    <select id="selectBaseShopInfoById" parameterType="String" resultMap="BaseShopInfoResult">
+        <include refid="selectBaseShopInfoVo"/>
+        where shop.id = #{id}
+    </select>
+
+    <insert id="insertBaseShopInfo" parameterType="BaseShopInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into base_shop_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopName != null">shop_name,</if>
+            <if test="shopDetail != null">shop_detail,</if>
+            <if test="address != null">address,</if>
+            <if test="contact != null">contact,</if>
+            <if test="phone != null">phone,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopName != null">#{shopName},</if>
+            <if test="shopDetail != null">#{shopDetail},</if>
+            <if test="address != null">#{address},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseShopInfo" parameterType="BaseShopInfo">
+        update base_shop_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopName != null">shop_name = #{shopName},</if>
+            <if test="shopDetail != null">shop_detail = #{shopDetail},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseShopInfoById" parameterType="String">
+        delete from base_shop_info where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseShopInfoByIds" parameterType="String">
+        delete from base_shop_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

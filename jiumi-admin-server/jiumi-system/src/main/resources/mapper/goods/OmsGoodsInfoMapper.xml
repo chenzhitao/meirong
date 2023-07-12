@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.goods.mapper.OmsGoodsInfoMapper">
+
+    <resultMap type="OmsGoodsInfo" id="OmsGoodsInfoResult">
+        <result property="id" column="id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="headerImg" column="header_img"/>
+        <result property="detailImg" column="detail_img"/>
+        <result property="detail" column="detail"/>
+        <result property="referrerFlag" column="referrer_flag"/>
+        <result property="sortNo" column="sort_no"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="price" column="price"/>
+        <result property="sharePercent" column="share_percent"/>
+        <result property="rebateRatioType" column="rebate_ratio_type"/>
+        <result property="rebateRatio" column="rebate_ratio"/>
+        <result property="sub1Commissiona" column="sub1_commissiona"/>
+        <result property="sub2Commissiona" column="sub2_commissiona"/>
+        <result property="sub2Commissionb" column="sub2_commissionb"/>
+        <result property="sub3Commissiona" column="sub3_commissiona"/>
+        <result property="sub3Commissionb" column="sub3_commissionb"/>
+        <result property="sub3Commissionc" column="sub3_commissionc"/>
+        <result property="onlineFlag" column="online_flag"/>
+    </resultMap>
+
+    <sql id="selectOmsGoodsInfoVo">
+        select id, type_id, type_name, name, description, header_img, detail_img, detail, referrer_flag, sort_no, status, create_time,
+               create_by, update_time, update_by,sku.price price ,share_percent,
+               rebate_ratio_type,rebate_ratio,online_flag,
+               sub1_commissiona,sub2_commissiona,sub2_commissionb,sub3_commissiona,sub3_commissionb,sub3_commissionc
+               from oms_goods_info
+               left join (SELECT goods_id ,min(price) price FROM `oms_goods_sku` group by goods_id) sku
+        on oms_goods_info.id = sku.goods_id
+    </sql>
+
+    <select id="selectOmsGoodsInfoList" parameterType="OmsGoodsInfo" resultMap="OmsGoodsInfoResult">
+        <include refid="selectOmsGoodsInfoVo"/>
+        <where>
+            <if test="typeName != null  and typeName != ''">and type_name like concat('%', #{typeName}, '%')</if>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="onlineFlag != null  and onlineFlag != ''">and online_flag = #{onlineFlag}</if>
+            <if test="referrerFlag != null  and referrerFlag != ''">and referrer_flag = #{referrerFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectWxOmsGoodsInfoList" parameterType="OmsGoodsInfo" resultMap="OmsGoodsInfoResult">
+        select a.*,min(b.price) as price
+        from oms_goods_info a
+        left join oms_goods_sku b on a.id=b.goods_id
+        where a.`status`='01'
+        <if test="typeId != null ">and a.type_id = #{typeId}</if>
+        <if test="onlineFlag != null  and onlineFlag != ''"> and a.online_flag = #{onlineFlag}</if>
+        group by a.id order by a.sort_no asc
+    </select>
+
+    <select id="selectOmsGoodsInfoReferrerList" parameterType="OmsGoodsInfo" resultMap="OmsGoodsInfoResult">
+        select a.*,min(b.price) as price
+        from oms_goods_info a
+        left join oms_goods_sku b on a.id=b.goods_id
+        where a.`status`='01' and a.referrer_flag='Y'
+        <if test="onlineFlag != null  and onlineFlag != ''"> and a.online_flag = #{onlineFlag}</if>
+        group by a.id order by a.sort_no asc limit 6
+    </select>
+
+    <select id="selectOmsGoodsInfoById" parameterType="String" resultMap="OmsGoodsInfoResult">
+        <include refid="selectOmsGoodsInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOmsGoodsInfo" parameterType="OmsGoodsInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_goods_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">type_id,</if>
+            <if test="typeName != null">type_name,</if>
+            <if test="name != null">name,</if>
+            <if test="description != null">description,</if>
+            <if test="headerImg != null">header_img,</if>
+            <if test="detailImg != null">detail_img,</if>
+            <if test="detail != null">detail,</if>
+            <if test="referrerFlag != null">referrer_flag,</if>
+            <if test="sortNo != null">sort_no,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="sharePercent != null">share_percent,</if>
+            <if test="rebateRatioType != null">rebate_ratio_type,</if>
+            <if test="rebateRatio != null">rebate_ratio,</if>
+            <if test="sub1Commissiona != null">sub1_commissiona,</if>
+            <if test="sub2Commissiona != null">sub2_commissiona,</if>
+            <if test="sub2Commissionb != null">sub2_commissionb,</if>
+            <if test="sub3Commissiona != null">sub3_commissiona,</if>
+            <if test="sub3Commissionb != null">sub3_commissionb,</if>
+            <if test="sub3Commissionc != null">sub3_commissionc,</if>
+            <if test="onlineFlag != null">online_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeId != null">#{typeId},</if>
+            <if test="typeName != null">#{typeName},</if>
+            <if test="name != null">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="headerImg != null">#{headerImg},</if>
+            <if test="detailImg != null">#{detailImg},</if>
+            <if test="detail != null">#{detail},</if>
+            <if test="referrerFlag != null">#{referrerFlag},</if>
+            <if test="sortNo != null">#{sortNo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="sharePercent != null">#{sharePercent},</if>
+            <if test="rebateRatioType != null">#{rebateRatioType},</if>
+            <if test="rebateRatio != null">#{rebateRatio},</if>
+            <if test="sub1Commissiona != null">#{sub1Commissiona},</if>
+            <if test="sub2Commissiona != null">#{sub2Commissiona},</if>
+            <if test="sub2Commissionb != null">#{sub2Commissionb},</if>
+            <if test="sub3Commissiona != null">#{sub3Commissiona},</if>
+            <if test="sub3Commissionb != null">#{sub3Commissionb},</if>
+            <if test="sub3Commissionc != null">#{sub3Commissionc},</if>
+            <if test="onlineFlag != null">#{onlineFlag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOmsGoodsInfo" parameterType="OmsGoodsInfo">
+        update oms_goods_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeId != null">type_id = #{typeId},</if>
+            <if test="typeName != null">type_name = #{typeName},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="headerImg != null">header_img = #{headerImg},</if>
+            <if test="detailImg != null">detail_img = #{detailImg},</if>
+            <if test="detail != null">detail = #{detail},</if>
+            <if test="referrerFlag != null">referrer_flag = #{referrerFlag},</if>
+            <if test="sortNo != null">sort_no = #{sortNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="sharePercent != null">share_percent = #{sharePercent},</if>
+            <if test="rebateRatioType != null">rebate_ratio_type = #{rebateRatioType},</if>
+            <if test="rebateRatio != null">rebate_ratio = #{rebateRatio},</if>
+            <if test="sub1Commissiona != null">sub1_commissiona = #{sub1Commissiona},</if>
+            <if test="sub2Commissiona != null">sub2_commissiona = #{sub2Commissiona},</if>
+            <if test="sub2Commissionb != null">sub2_commissionb = #{sub2Commissionb},</if>
+            <if test="sub3Commissiona != null">sub3_commissiona = #{sub3Commissiona},</if>
+            <if test="sub3Commissionb != null">sub3_commissionb = #{sub3Commissionb},</if>
+            <if test="sub3Commissionc != null">sub3_commissionc = #{sub3Commissionc},</if>
+            <if test="onlineFlag != null">online_flag = #{onlineFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOmsGoodsInfoById" parameterType="String">
+        delete from oms_goods_info where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsGoodsInfoByIds" parameterType="String">
+        delete from oms_goods_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

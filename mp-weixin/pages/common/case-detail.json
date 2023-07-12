@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "案例详情",
+  "usingComponents": {
+    "u-parse": "/uview-ui/components/u-parse/u-parse"
+  }
+}

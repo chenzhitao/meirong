@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.goods.mapper.OmsGoodsSkuMapper">
+
+    <resultMap type="OmsGoodsSku" id="OmsGoodsSkuResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="skuName"    column="sku_name"    />
+        <result property="price"    column="price"    />
+        <result property="stockNum"    column="stock_num"    />
+        <result property="rebateRatioType" column="rebate_ratio_type"/>
+        <result property="rebateRatio" column="rebate_ratio"/>
+        <result property="sub1Commissiona" column="sub1_commissiona"/>
+        <result property="sub2Commissiona" column="sub2_commissiona"/>
+        <result property="sub2Commissionb" column="sub2_commissionb"/>
+        <result property="sub3Commissiona" column="sub3_commissiona"/>
+        <result property="sub3Commissionb" column="sub3_commissionb"/>
+        <result property="sub3Commissionc" column="sub3_commissionc"/>
+    </resultMap>
+
+    <sql id="selectOmsGoodsSkuVo">
+        select id, goods_id, sku_name, price, stock_num from oms_goods_sku
+    </sql>
+
+    <select id="selectOmsGoodsSkuList" parameterType="OmsGoodsSku" resultMap="OmsGoodsSkuResult">
+        <include refid="selectOmsGoodsSkuVo"/>
+        <where>
+            <if test="goodsId != null">goods_id=#{goodsId}</if>
+        </where>
+        order by id asc
+    </select>
+
+
+    <select id="selectOmsAllGoodsSkuList" parameterType="OmsGoodsSku" resultMap="OmsGoodsSkuResult">
+        SELECT
+            a.id,
+            a.goods_id,
+            CONCAT( b.`name`, a.sku_name ) AS sku_name,
+            a.price,
+            a.stock_num,
+            b.rebate_ratio_type,
+            b.rebate_ratio,
+            b.sub1_commissiona,
+            b.sub2_commissiona,
+            b.sub2_commissionb,
+            b.sub3_commissiona,
+            b.sub3_commissionb,
+            b.sub3_commissionc
+        FROM
+            oms_goods_sku a
+                LEFT JOIN oms_goods_info b ON a.goods_id = b.id
+        WHERE
+            b.`status` = '01'
+        ORDER BY
+            b.`name`,
+            a.sku_name
+    </select>
+
+    <select id="selectOmsGoodsSkuById" parameterType="String" resultMap="OmsGoodsSkuResult">
+        <include refid="selectOmsGoodsSkuVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOmsGoodsSku" parameterType="OmsGoodsSku" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_goods_sku
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="skuName != null">sku_name,</if>
+            <if test="price != null">price,</if>
+            <if test="stockNum != null">stock_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="skuName != null">#{skuName},</if>
+            <if test="price != null">#{price},</if>
+            <if test="stockNum != null">#{stockNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsGoodsSku" parameterType="OmsGoodsSku">
+        update oms_goods_sku
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="skuName != null">sku_name = #{skuName},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="stockNum != null">stock_num = #{stockNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateOmsGoodsStrock" parameterType="OmsGoodsSku">
+        update oms_goods_sku
+        set stock_num = #{stockNum}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOmsGoodsSkuById" parameterType="String">
+        delete from oms_goods_sku where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsGoodsSkuByIds" parameterType="String">
+        delete from oms_goods_sku where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteOmsGoodsSkuByGoodsId">
+        delete from oms_goods_sku where goods_id = #{goodsId}
+    </delete>
+
+    <insert id="insertBatchOmsGoodsSku">
+        insert into oms_goods_sku(goods_id,sku_name,price,stock_num) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.goodsId}, #{item.skuName}, #{item.price}, #{item.stockNum})
+        </foreach>
+    </insert>
+</mapper>

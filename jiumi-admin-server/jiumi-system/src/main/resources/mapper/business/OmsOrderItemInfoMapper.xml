@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsOrderItemInfoMapper">
+
+    <resultMap type="OmsOrderItemInfo" id="OmsOrderItemInfoResult">
+        <result property="id"    column="id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="shopName"    column="shopName"    />
+        <result property="userId"    column="user_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="outTradeNo"    column="out_trade_no"    />
+        <result property="orderType"    column="order_type"    />
+        <result property="accountAmount"    column="account_amount"    />
+        <result property="sumAmount"    column="sum_amount"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="payment1"    column="payment1"    />
+        <result property="payment2"    column="payment2"    />
+        <result property="payment3"    column="payment3"    />
+        <result property="payment4"    column="payment4"    />
+        <result property="payment5"    column="payment5"    />
+        <result property="payment6"    column="payment6"    />
+        <result property="payment7"    column="payment7"    />
+        <result property="payment8"    column="payment8"    />
+        <result property="payment9"    column="payment9"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="orderFile"    column="order_file"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="cardAmount"    column="card_amount"    />
+    </resultMap>
+
+    <resultMap id="OmsOrderItemInfoOmsOrderItemDetailResult" type="OmsOrderItemInfo" extends="OmsOrderItemInfoResult">
+        <collection property="omsOrderItemDetailList" notNullColumn="sub_id" javaType="java.util.List" resultMap="OmsOrderItemDetailResult" />
+    </resultMap>
+
+    <resultMap type="OmsOrderItemDetail" id="OmsOrderItemDetailResult">
+        <result property="id"    column="sub_id"    />
+        <result property="orderId"    column="sub_order_id"    />
+        <result property="consumerType"    column="sub_consumer_type"    />
+        <result property="consumerId"    column="sub_consumer_id"    />
+        <result property="price"    column="sub_price"    />
+        <result property="num"    column="sub_num"    />
+        <result property="cardId"    column="sub_card_Id"    />
+        <result property="cardNum"    column="sub_card_num"    />
+        <result property="consultant1"    column="sub_consultant1"    />
+        <result property="consultant1Amount"    column="sub_consultant1_amount"    />
+        <result property="consultant2"    column="sub_consultant2"    />
+        <result property="consultant2Amount"    column="sub_consultant2_amount"    />
+        <result property="consultant3"    column="sub_consultant3"    />
+        <result property="consultant3Amount"    column="sub_consultant3_amount"    />
+        <result property="finalAmount"    column="sub_final_amount"    />
+    </resultMap>
+
+    <sql id="selectOmsOrderItemInfoVo">
+        select id, shop_id, user_id, user_name, user_phone, order_code, order_time, out_trade_no,
+               order_type,account_amount, sum_amount, pay_type, payment1, payment2, payment3, payment4, payment5,
+               payment6, payment7, payment8,payment9, pay_time, order_status, remark, order_file, create_time,
+               create_by, update_time, update_by,apply_id,card_amount from oms_order_item_info
+    </sql>
+
+    <select id="selectOmsOrderItemInfoList" parameterType="OmsOrderItemInfo" resultMap="OmsOrderItemInfoResult">
+        select a.*,b.shop_name as shopName
+        from oms_order_item_info a
+        left join base_shop_info b on a.shop_id=b.id
+        <where>
+            <if test="shopId != null "> and a.shop_id in (${shopId})</if>
+            <if test="userId != null "> and a.user_id = #{userId}</if>
+            <if test="applyId != null "> and a.apply_id = #{applyId}</if>
+            <if test="userName != null  and userName != ''"> and a.user_name like concat('%', #{userName}, '%')</if>
+            <if test="userPhone != null  and userPhone != ''"> and a.user_phone = #{userPhone}</if>
+            <if test="orderCode != null  and orderCode != ''"> and a.order_code = #{orderCode}</if>
+            <if test="params.beginTime != null and params.beginTime != '' and params.beginTime != 'undefined'"><!-- 开始时间检索 -->
+                and date_format(a.order_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != '' and params.endTime != 'undefined'"><!-- 结束时间检索 -->
+                and date_format(a.order_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="outTradeNo != null  and outTradeNo != ''"> and a.out_trade_no = #{outTradeNo}</if>
+            <if test="orderType != null  and orderType != ''"> and a.order_type in (${orderType})</if>
+            <if test="orderStatus != null  and orderStatus != ''"> and a.order_status = #{orderStatus}</if>
+            <if test="remark != null  and remark != ''"> and a.remark like concat('%', #{remark}, '%')</if>
+            <if test="itemId != null "> and a.id in (select order_id from oms_order_item_detail where consumer_type=1 and consumer_id=#{itemId})</if>
+            <if test="goodsId != null "> and a.id in (select order_id from oms_order_item_detail where consumer_type=2 and consumer_id=#{goodsId})</if>
+        </where>
+        order by a.pay_time desc
+    </select>
+
+    <select id="selectOmsOrderItemInfoById" parameterType="Long" resultMap="OmsOrderItemInfoResult">
+        <include refid="selectOmsOrderItemInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectOmsOrderItemInfoByApplyId" parameterType="String" resultMap="OmsOrderItemInfoResult">
+        <include refid="selectOmsOrderItemInfoVo"/>
+        where apply_id = #{id}
+    </select>
+
+    <insert id="insertOmsOrderItemInfo" parameterType="OmsOrderItemInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_order_item_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shop_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="applyId != null">apply_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="userPhone != null">user_phone,</if>
+            <if test="orderCode != null">order_code,</if>
+            <if test="orderTime != null">order_time,</if>
+            <if test="outTradeNo != null">out_trade_no,</if>
+            <if test="orderType != null">order_type,</if>
+            <if test="accountAmount != null">account_amount,</if>
+            <if test="sumAmount != null">sum_amount,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="payment1 != null">payment1,</if>
+            <if test="payment2 != null">payment2,</if>
+            <if test="payment3 != null">payment3,</if>
+            <if test="payment4 != null">payment4,</if>
+            <if test="payment5 != null">payment5,</if>
+            <if test="payment6 != null">payment6,</if>
+            <if test="payment7 != null">payment7,</if>
+            <if test="payment8 != null">payment8,</if>
+            <if test="payment9 != null">payment9,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="orderFile != null">order_file,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="cardAmount != null">card_amount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="applyId != null">#{applyId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="userPhone != null">#{userPhone},</if>
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="orderTime != null">#{orderTime},</if>
+            <if test="outTradeNo != null">#{outTradeNo},</if>
+            <if test="orderType != null">#{orderType},</if>
+            <if test="accountAmount != null">#{accountAmount},</if>
+            <if test="sumAmount != null">#{sumAmount},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="payment1 != null">#{payment1},</if>
+            <if test="payment2 != null">#{payment2},</if>
+            <if test="payment3 != null">#{payment3},</if>
+            <if test="payment4 != null">#{payment4},</if>
+            <if test="payment5 != null">#{payment5},</if>
+            <if test="payment6 != null">#{payment6},</if>
+            <if test="payment7 != null">#{payment7},</if>
+            <if test="payment8 != null">#{payment8},</if>
+            <if test="payment9 != null">#{payment9},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="orderFile != null">#{orderFile},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="cardAmount != null">#{cardAmount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsOrderItemInfo" parameterType="OmsOrderItemInfo">
+        update oms_order_item_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="userPhone != null">user_phone = #{userPhone},</if>
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+            <if test="orderTime != null">order_time = #{orderTime},</if>
+            <if test="outTradeNo != null">out_trade_no = #{outTradeNo},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="accountAmount != null">account_amount = #{accountAmount},</if>
+            <if test="sumAmount != null">sum_amount = #{sumAmount},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="payment1 != null">payment1 = #{payment1},</if>
+            <if test="payment2 != null">payment2 = #{payment2},</if>
+            <if test="payment3 != null">payment3 = #{payment3},</if>
+            <if test="payment4 != null">payment4 = #{payment4},</if>
+            <if test="payment5 != null">payment5 = #{payment5},</if>
+            <if test="payment6 != null">payment6 = #{payment6},</if>
+            <if test="payment7 != null">payment7 = #{payment7},</if>
+            <if test="payment8 != null">payment8 = #{payment8},</if>
+            <if test="payment9 != null">payment9 = #{payment9},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="orderFile != null">order_file = #{orderFile},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="cardAmount != null">card_amount = #{cardAmount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="backOrderItemInfo" parameterType="Long">
+        insert into oms_order_item_info_back
+            (id,shop_id,user_id,apply_id,user_name,user_phone,order_code,order_time,out_trade_no,order_type,
+             account_amount,sum_amount,pay_type,payment1,payment2,payment3,payment4,payment5,payment6,payment7,payment8,payment9,
+             pay_time,order_status,remark,order_file,create_time,create_by,update_time,update_by)
+         select
+             id,shop_id,user_id,apply_id,user_name,user_phone,order_code,order_time,out_trade_no,order_type,
+             account_amount,sum_amount,pay_type,payment1,payment2,payment3,payment4,payment5,payment6,payment7,payment8,payment9,
+             pay_time,order_status,remark,order_file,create_time,create_by,sysdate(),'撤单操作'
+        from oms_order_item_info where id = #{id}
+    </update>
+
+    <delete id="deleteOmsOrderItemInfoById" parameterType="Long">
+        delete from oms_order_item_info where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsOrderItemInfoByIds" parameterType="String">
+        delete from oms_order_item_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteOmsOrderItemDetailByOrderIds" parameterType="String">
+        delete from oms_order_item_detail where order_id in
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteOmsOrderItemDetailByOrderId" parameterType="Long">
+        delete from oms_order_item_detail where order_id = #{id}
+    </delete>
+
+    <insert id="batchOmsOrderItemDetail">
+        insert into oms_order_item_detail( id, order_id, consumer_type, consumer_id, price, num,card_id, card_num,sub_type, consultant1, consultant1_amount, consultant2, consultant2_amount, consultant3, consultant3_amount, final_amount) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.id}, #{item.orderId}, #{item.consumerType}, #{item.consumerId}, #{item.price}, #{item.num},#{item.cardId}, #{item.cardNum},#{item.subType}, #{item.consultant1}, #{item.consultant1Amount}, #{item.consultant2}, #{item.consultant2Amount}, #{item.consultant3}, #{item.consultant3Amount}, #{item.finalAmount})
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.baseconfig.mapper.BaseSearchHistoryMapper">
+
+    <resultMap type="BaseSearchHistory" id="BaseSearchHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="words"    column="words"    />
+        <result property="type"    column="type"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBaseSearchHistoryVo">
+        select id, user_id, words, type, create_time from base_search_history
+    </sql>
+
+    <select id="selectBaseSearchHistoryList" parameterType="BaseSearchHistory" resultMap="BaseSearchHistoryResult">
+        <include refid="selectBaseSearchHistoryVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="words != null  and words != ''"> and words = #{words}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+        order by create_time desc limit 0,5
+    </select>
+
+    <select id="selectBaseSearchHistoryById" parameterType="String" resultMap="BaseSearchHistoryResult">
+        <include refid="selectBaseSearchHistoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseSearchHistory" parameterType="BaseSearchHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into base_search_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="words != null">words,</if>
+            <if test="type != null">type,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="words != null">#{words},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseSearchHistory" parameterType="BaseSearchHistory">
+        update base_search_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="words != null">words = #{words},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseSearchHistoryById" parameterType="String">
+        delete from base_search_history where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseSearchHistoryByIds" parameterType="String">
+        delete from base_search_history where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

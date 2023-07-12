@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.finance.mapper.UserIncomeDetailMapper">
+
+    <resultMap type="UserIncomeDetail" id="UserIncomeDetailResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="userName"    />
+        <result property="accountAmount"    column="account_amount"    />
+        <result property="incomeAmount"    column="income_amount"    />
+        <result property="incomeTime"    column="income_time"    />
+        <result property="incomeType"    column="income_type"    />
+        <result property="incomeDesc"    column="income_desc"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="sourceUserId"    column="source_user_id"    />
+        <result property="sourceUserName"    column="source_user_name"    />
+        <result property="sourceUserAvatar"    column="source_user_avatar"    />
+    </resultMap>
+
+    <sql id="selectUserIncomeDetailVo">
+        select id, user_id, account_amount, income_amount, income_time, income_type, income_desc, create_by,
+         create_time, update_by, update_time,source_user_id,source_user_name,source_user_avatar
+         from user_income_detail
+    </sql>
+
+    <select id="selectUserIncomeDetailList" parameterType="UserIncomeDetail" resultMap="UserIncomeDetailResult">
+        select a.*,b.nick_name as userName
+        from user_income_detail  a
+        left join sys_user b on a.user_id=b.user_id
+        where 1=1
+            <if test="userId != null "> and a.user_id = #{userId}</if>
+            <if test="userName != null "> and( b.user_name like concat('%', #{userName}, '%')
+                 or b.nick_name like concat('%', #{userName}, '%')
+                 )</if>
+            <if test="sourceShop != null ">
+              and a.user_id in (SELECT user_id FROM sys_user where source_shop in (${sourceShop}))
+             </if>
+            <if test="params.beginIncomeTime != null and params.beginIncomeTime != '' and params.endIncomeTime != null and params.endIncomeTime != ''"> and a.income_time between #{params.beginIncomeTime} and #{params.endIncomeTime}</if>
+            <if test="incomeType != null  and incomeType != ''"> and a.income_type = #{incomeType}</if>
+            <if test="beginTime != null and beginTime != ''"> and a.income_time <![CDATA[ >= ]]>
+                DATE_FORMAT(#{beginTime},'%Y-%m-%d %H:%i:%s')
+            </if>
+            <if test="endTime != null and endTime != ''"> and a.income_time <![CDATA[<= ]]>
+                DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%s')
+            </if>
+        order by a.income_time desc
+    </select>
+
+    <select id="selectUserIncomeDetailById" parameterType="Long" resultMap="UserIncomeDetailResult">
+        <include refid="selectUserIncomeDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertUserIncomeDetail" parameterType="UserIncomeDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into user_income_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="accountAmount != null">account_amount,</if>
+            <if test="incomeAmount != null">income_amount,</if>
+            <if test="incomeTime != null">income_time,</if>
+            <if test="incomeType != null">income_type,</if>
+            <if test="incomeDesc != null">income_desc,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="sourceUserId != null">source_user_id,</if>
+            <if test="sourceUserName != null">source_user_name,</if>
+            <if test="sourceUserAvatar != null">source_user_avatar,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="accountAmount != null">#{accountAmount},</if>
+            <if test="incomeAmount != null">#{incomeAmount},</if>
+            <if test="incomeTime != null">#{incomeTime},</if>
+            <if test="incomeType != null">#{incomeType},</if>
+            <if test="incomeDesc != null">#{incomeDesc},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="sourceUserId != null">#{sourceUserId},</if>
+            <if test="sourceUserName != null">#{sourceUserName},</if>
+            <if test="sourceUserAvatar != null">#{sourceUserAvatar},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserIncomeDetail" parameterType="UserIncomeDetail">
+        update user_income_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="accountAmount != null">account_amount = #{accountAmount},</if>
+            <if test="incomeAmount != null">income_amount = #{incomeAmount},</if>
+            <if test="incomeTime != null">income_time = #{incomeTime},</if>
+            <if test="incomeType != null">income_type = #{incomeType},</if>
+            <if test="incomeDesc != null">income_desc = #{incomeDesc},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserIncomeDetailById" parameterType="Long">
+        delete from user_income_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteUserIncomeDetailByIds" parameterType="String">
+        delete from user_income_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

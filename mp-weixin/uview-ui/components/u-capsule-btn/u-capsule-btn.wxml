@@ -1,0 +1,1 @@
+<view class="flex align-center capsule" style="{{('background: url('+imgUrl+') no-repeat;background-size: 100% 100%;'+' padding:'+padding)}}"><slot></slot></view>

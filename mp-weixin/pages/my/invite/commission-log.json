@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "佣金记录",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "u-icon": "/uview-ui/components/u-icon/u-icon",
+    "u-empty": "/uview-ui/components/u-empty/u-empty",
+    "u-card": "/uview-ui/components/u-card/u-card",
+    "u-avatar": "/uview-ui/components/u-avatar/u-avatar",
+    "u-picker": "/uview-ui/components/u-picker/u-picker",
+    "u-loadmore": "/uview-ui/components/u-loadmore/u-loadmore"
+  }
+}

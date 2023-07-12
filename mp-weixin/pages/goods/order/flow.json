@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "订单物流",
+  "usingComponents": {
+    "u-avatar": "/uview-ui/components/u-avatar/u-avatar"
+  }
+}

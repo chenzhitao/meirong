@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsOrderInfoMapper">
+
+    <resultMap type="OmsOrderInfo" id="OmsOrderInfoResult">
+        <result property="id"    column="id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="productName"    column="product_name"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="orderTime"    column="order_time"    />
+        <result property="outTradeNo"    column="out_trade_no"    />
+        <result property="orderType"    column="order_type"    />
+        <result property="consumeType"    column="consume_type"    />
+        <result property="orderAmount"    column="order_amount"    />
+        <result property="freightAmount"    column="freight_amount"    />
+        <result property="sumAmount"    column="sum_amount"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="logisticsCode"    column="logistics_code"    />
+        <result property="logisticsType"    column="logistics_type"    />
+        <result property="takeUser"    column="take_user"    />
+        <result property="takePhone"    column="take_phone"    />
+        <result property="takeAddress"    column="take_address"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectOmsOrderInfoVo">
+        select id, shop_id,user_id, user_name,pay_type,consume_type, product_name,
+               order_code, order_time, out_trade_no, order_type, order_amount,
+               freight_amount, sum_amount, pay_time, order_status, logistics_code,
+               logistics_type, take_user, take_phone, take_address, create_time,
+               create_by, update_time, update_by from oms_order_info
+    </sql>
+
+    <select id="selectOmsOrderInfoList" parameterType="OmsOrderInfo" resultMap="OmsOrderInfoResult">
+        <include refid="selectOmsOrderInfoVo"/>
+        <where>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="consumeType != null  and consumeType != ''"> and consume_type = #{consumeType}</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="orderCode != null  and orderCode != ''"> and order_code = #{orderCode}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="orderTime != null ">and  date_format(order_time,'%y%m%d') = date_format(#{orderTime},'%y%m%d')</if>
+            <if test="outTradeNo != null  and outTradeNo != ''"> and out_trade_no = #{outTradeNo}</if>
+            <if test="orderStatus != null  and orderStatus == '01'"> and order_status in ('01')</if>
+            <if test="orderStatus != null  and orderStatus == '02'"> and order_status in ('02','03')</if>
+            <if test="orderStatus != null  and orderStatus == '03'"> and order_status in ('04')</if>
+            <if test="orderStatus != null  and orderStatus == '04'"> and order_status in ('02','03','04')</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectOmsOrderInfoById" parameterType="String" resultMap="OmsOrderInfoResult">
+        <include refid="selectOmsOrderInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectOmsOrderInfoByCode" parameterType="String" resultMap="OmsOrderInfoResult">
+        <include refid="selectOmsOrderInfoVo"/>
+        where order_code = #{orderCode}
+    </select>
+
+    <select id="selectOmsOrderInfoByOutTradeNo" parameterType="String" resultMap="OmsOrderInfoResult">
+        <include refid="selectOmsOrderInfoVo"/>
+        where out_trade_no = #{outTradeNo}
+    </select>
+
+    <select id="selectOmsOrderUnRevsiveList" resultMap="OmsOrderInfoResult">
+        <include refid="selectOmsOrderInfoVo"/>
+        where  datediff(now(),pay_time)>=7 and order_status = '03' and order_type='01'
+    </select>
+
+    <select id="selectOmsOrderSnycAllocate" resultMap="OmsOrderInfoResult">
+        <include refid="selectOmsOrderInfoVo"/>
+        where  order_status = '04' and ollacate_flag='N'
+    </select>
+
+    <insert id="insertOmsOrderInfo" parameterType="OmsOrderInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_order_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shop_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="productName != null">product_name,</if>
+            <if test="orderCode != null">order_code,</if>
+            <if test="orderTime != null">order_time,</if>
+            <if test="outTradeNo != null">out_trade_no,</if>
+            <if test="orderType != null">order_type,</if>
+            <if test="orderAmount != null">order_amount,</if>
+            <if test="freightAmount != null">freight_amount,</if>
+            <if test="sumAmount != null">sum_amount,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="logisticsCode != null">logistics_code,</if>
+            <if test="logisticsType != null">logistics_type,</if>
+            <if test="takeUser != null">take_user,</if>
+            <if test="takePhone != null">take_phone,</if>
+            <if test="takeAddress != null">take_address,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="consumeType != null">consume_type,</if>
+            <if test="ollacateFlag != null">ollacate_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="productName != null">#{productName},</if>
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="orderTime != null">#{orderTime},</if>
+            <if test="outTradeNo != null">#{outTradeNo},</if>
+            <if test="orderType != null">#{orderType},</if>
+            <if test="orderAmount != null">#{orderAmount},</if>
+            <if test="freightAmount != null">#{freightAmount},</if>
+            <if test="sumAmount != null">#{sumAmount},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="logisticsCode != null">#{logisticsCode},</if>
+            <if test="logisticsType != null">#{logisticsType},</if>
+            <if test="takeUser != null">#{takeUser},</if>
+            <if test="takePhone != null">#{takePhone},</if>
+            <if test="takeAddress != null">#{takeAddress},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="consumeType != null">#{consumeType},</if>
+            <if test="ollacateFlag != null">#{ollacateFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsOrderInfo" parameterType="OmsOrderInfo">
+        update oms_order_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+            <if test="orderTime != null">order_time = #{orderTime},</if>
+            <if test="outTradeNo != null">out_trade_no = #{outTradeNo},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="orderAmount != null and orderAmount>0">order_amount = #{orderAmount},</if>
+            <if test="freightAmount != null  and freightAmount>0">freight_amount = #{freightAmount},</if>
+            <if test="sumAmount != null and sumAmount>0">sum_amount = #{sumAmount},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="logisticsCode != null">logistics_code = #{logisticsCode},</if>
+            <if test="logisticsType != null">logistics_type = #{logisticsType},</if>
+            <if test="takeUser != null">take_user = #{takeUser},</if>
+            <if test="takePhone != null">take_phone = #{takePhone},</if>
+            <if test="takeAddress != null">take_address = #{takeAddress},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateOmsOrderOllacate" parameterType="OmsOrderInfo">
+        update oms_order_info set ollacate_flag='Y',update_time = #{updateTime}
+        where id = #{id} and ollacate_flag='N'
+    </update>
+
+    <delete id="deleteOmsOrderInfoById" parameterType="String">
+        delete from oms_order_info where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsOrderInfoByIds" parameterType="String">
+        delete from oms_order_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

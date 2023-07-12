@@ -1,0 +1,12 @@
+{
+  "navigationBarBackgroundColor": "#B29190",
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "我的钱包",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "u-subsection": "/uview-ui/components/u-subsection/u-subsection",
+    "u-card": "/uview-ui/components/u-card/u-card",
+    "u-empty": "/uview-ui/components/u-empty/u-empty",
+    "u-loadmore": "/uview-ui/components/u-loadmore/u-loadmore"
+  }
+}

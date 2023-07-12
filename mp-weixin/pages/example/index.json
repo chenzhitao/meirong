@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "小象美业",
+  "usingComponents": {
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-swiper": "/uview-ui/components/u-swiper/u-swiper",
+    "u-capsule-btn": "/uview-ui/components/u-capsule-btn/u-capsule-btn",
+    "u-project": "/uview-ui/components/u-project/u-project",
+    "u-toast": "/uview-ui/components/u-toast/u-toast"
+  }
+}

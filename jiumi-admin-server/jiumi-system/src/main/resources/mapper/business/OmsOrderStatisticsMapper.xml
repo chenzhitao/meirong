@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsOrderStatisticsMapper">
+
+    <select id="selectList"  resultType="com.jiumi.business.domain.OmsOrderStatistics">
+        SELECT
+          t.shop_id shopId,
+          t.user_id userId,
+          max(t.user_name) userName,
+          t.consume_type consumeType,
+          max(shop.shop_name) shopName,
+          sum( sum_amount ) totalConsumeTypeAmount,
+--           ( select count(1) from (SELECT  1 FROM  oms_order_info a  WHERE  a.order_status IN ( '02', '03', '04' )
+--               AND a.shop_id = t.shop_id  GROUP BY a.user_id ) t1)  shopUserCount,
+         9 as shopUserCount,
+        (select sum(a.sum_amount) from oms_order_info a where a.order_status in ('02','03','04') and a.shop_id = t.shop_id ) totalOrderAmount
+        FROM
+                `oms_order_info` t left join base_shop_info shop on t.shop_id = shop.id
+        <where>
+            t.order_status in ('02','03','04')
+            <if test="shopId != null and shopId != ''"> and t.shop_id = #{shopId}</if>
+            <if test="userId != null and userId != ''"> and t.user_id = #{userId}</if>
+        </where>
+        GROUP BY
+                t.shop_id,
+                t.user_id,
+                t.consume_type
+    </select>
+
+
+</mapper>

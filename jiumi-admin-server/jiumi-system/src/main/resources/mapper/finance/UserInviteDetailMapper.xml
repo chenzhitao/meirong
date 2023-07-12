@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.finance.mapper.UserInviteDetailMapper">
+
+    <resultMap type="UserInviteDetail" id="UserInviteDetailResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="inviteUserId"    column="invite_user_id"    />
+        <result property="inviteOpenid"    column="invite_openid"    />
+        <result property="inviteName"    column="invite_name"    />
+        <result property="inviteTime"    column="invite_time"    />
+        <result property="remardAmount"    column="remard_amount"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="inviteNum"    column="inviteNum"    />
+        <result property="inviteHeader"    column="inviteHeader"    />
+    </resultMap>
+
+    <sql id="selectUserInviteDetailVo">
+        select id, user_id, user_name,invite_user_id, invite_openid, invite_name, invite_time, remard_amount,
+         create_time, create_by from user_invite_detail
+    </sql>
+
+    <select id="selectUserInviteDetailList" parameterType="UserInviteDetail" resultMap="UserInviteDetailResult">
+        select a.create_time,a.invite_time, b.user_name,b.avatar as inviteHeader
+        from user_invite_detail a
+        left join sys_user b on a.invite_user_id=b.user_id
+        where 1=1
+        <if test="userName != null  and userName != ''"> and a.user_name like concat('%', #{userName}, '%')</if>
+        <if test="inviteName != null  and inviteName != ''"> and a.invite_name like concat('%', #{inviteName}, '%')</if>
+        <if test="params.beginInviteTime != null and params.beginInviteTime != '' and params.endInviteTime != null and params.endInviteTime != ''"> and invite_time between #{params.beginInviteTime} and #{params.endInviteTime}</if>
+        <if test="userId != null "> and a.user_id = #{userId}</if>
+        <if test="inviteOpenid != null "> and a.invite_user_id = #{inviteOpenid}</if>
+        <if test="remardAmount != null "> and a.remard_amount = #{remardAmount}</if>
+        order by a.invite_time desc
+    </select>
+
+    <select id="selectUserInviteRankList" parameterType="UserInviteDetail" resultMap="UserInviteDetailResult">
+        select b.*,(select sum(income_amount) from user_income_detail where user_id=b.user_id)as remard_amount from (
+        select a.user_id, a.user_name,count(1) as inviteNum,b.avatar as inviteHeader
+         from user_invite_detail a
+         left join sys_user b on a.user_id=b.user_id
+         where a.user_id not in (${inviteHeader})
+         group by a.user_id
+         ) b order by b.inviteNum desc
+    </select>
+
+    <select id="selectUserInviteDetailById" parameterType="Long" resultMap="UserInviteDetailResult">
+        <include refid="selectUserInviteDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertUserInviteDetail" parameterType="UserInviteDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into user_invite_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="inviteUserId != null">invite_user_id,</if>
+            <if test="inviteOpenid != null">invite_openid,</if>
+            <if test="inviteName != null">invite_name,</if>
+            <if test="inviteTime != null">invite_time,</if>
+            <if test="remardAmount != null">remard_amount,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="inviteUserId != null">#{inviteUserId},</if>
+            <if test="inviteOpenid != null">#{inviteOpenid},</if>
+            <if test="inviteName != null">#{inviteName},</if>
+            <if test="inviteTime != null">#{inviteTime},</if>
+            <if test="remardAmount != null">#{remardAmount},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserInviteDetail" parameterType="UserInviteDetail">
+        update user_invite_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="inviteOpenid != null">invite_openid = #{inviteOpenid},</if>
+            <if test="inviteName != null">invite_name = #{inviteName},</if>
+            <if test="inviteTime != null">invite_time = #{inviteTime},</if>
+            <if test="remardAmount != null">remard_amount = #{remardAmount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserInviteDetailById" parameterType="Long">
+        delete from user_invite_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteUserInviteDetailByIds" parameterType="String">
+        delete from user_invite_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

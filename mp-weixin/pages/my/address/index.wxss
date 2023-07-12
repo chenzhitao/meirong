@@ -1,0 +1,10 @@
+
+.address-add {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	/* margin-top: 150rpx; */
+	padding: 30rpx;
+	z-index: 99;
+}
+

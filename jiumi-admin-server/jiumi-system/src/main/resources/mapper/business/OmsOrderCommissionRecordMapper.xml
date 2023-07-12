@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.business.mapper.OmsOrderCommissionRecordMapper">
+
+    <resultMap type="OmsOrderCommissionRecord" id="OmsOrderCommissionRecordResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="orderAmount"    column="order_amount"    />
+        <result property="commissionPercent"    column="commission_percent"    />
+        <result property="commissionAmount"    column="commission_amount"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="payType"    column="pay_type"    />
+    </resultMap>
+
+    <sql id="selectOmsOrderCommissionRecordVo">
+        select id, user_id, user_name, order_id, order_amount, commission_percent, commission_amount, pay_time, customer_id, pay_type from oms_order_commission_record
+    </sql>
+
+    <select id="selectOmsOrderCommissionRecordList" parameterType="OmsOrderCommissionRecord" resultMap="OmsOrderCommissionRecordResult">
+        <include refid="selectOmsOrderCommissionRecordVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="orderAmount != null "> and order_amount = #{orderAmount}</if>
+            <if test="commissionPercent != null "> and commission_percent = #{commissionPercent}</if>
+            <if test="commissionAmount != null  and commissionAmount != ''"> and commission_amount = #{commissionAmount}</if>
+            <if test="payTime != null "> and pay_time = #{payTime}</if>
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+            <if test="payType != null  and payType != ''"> and pay_type = #{payType}</if>
+        </where>
+    </select>
+
+    <select id="selectOmsOrderCommissionRecordById" parameterType="String" resultMap="OmsOrderCommissionRecordResult">
+        <include refid="selectOmsOrderCommissionRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOmsOrderCommissionRecord" parameterType="OmsOrderCommissionRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into oms_order_commission_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="orderAmount != null">order_amount,</if>
+            <if test="commissionPercent != null">commission_percent,</if>
+            <if test="commissionAmount != null">commission_amount,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="payType != null">pay_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="orderAmount != null">#{orderAmount},</if>
+            <if test="commissionPercent != null">#{commissionPercent},</if>
+            <if test="commissionAmount != null">#{commissionAmount},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="payType != null">#{payType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOmsOrderCommissionRecord" parameterType="OmsOrderCommissionRecord">
+        update oms_order_commission_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="orderAmount != null">order_amount = #{orderAmount},</if>
+            <if test="commissionPercent != null">commission_percent = #{commissionPercent},</if>
+            <if test="commissionAmount != null">commission_amount = #{commissionAmount},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOmsOrderCommissionRecordById" parameterType="String">
+        delete from oms_order_commission_record where id = #{id}
+    </delete>
+
+    <delete id="deleteOmsOrderCommissionRecordByIds" parameterType="String">
+        delete from oms_order_commission_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

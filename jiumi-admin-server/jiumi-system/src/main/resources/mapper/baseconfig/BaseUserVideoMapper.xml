@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.baseconfig.mapper.BaseUserVideoMapper">
+
+    <resultMap type="BaseUserVideo" id="BaseUserVideoResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="videoId"    column="video_id"    />
+        <result property="videoName"    column="video_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBaseUserVideoVo">
+        select id, user_id, video_id, video_name, create_time from base_user_video
+    </sql>
+
+    <select id="selectBaseUserVideoList" parameterType="BaseUserVideo" resultMap="BaseUserVideoResult">
+        <include refid="selectBaseUserVideoVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="videoId != null "> and video_id = #{videoId}</if>
+            <if test="videoName != null  and videoName != ''"> and video_name like concat('%', #{videoName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBaseUserVideoById" parameterType="String" resultMap="BaseUserVideoResult">
+        <include refid="selectBaseUserVideoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseUserVideo" parameterType="BaseUserVideo" useGeneratedKeys="true" keyProperty="id">
+        insert into base_user_video
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="videoId != null">video_id,</if>
+            <if test="videoName != null">video_name,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="videoId != null">#{videoId},</if>
+            <if test="videoName != null">#{videoName},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseUserVideo" parameterType="BaseUserVideo">
+        update base_user_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="videoId != null">video_id = #{videoId},</if>
+            <if test="videoName != null">video_name = #{videoName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseUserVideoById" parameterType="String">
+        delete from base_user_video where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseUserVideoByIds" parameterType="String">
+        delete from base_user_video where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

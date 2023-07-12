@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "支付结果",
+  "usingComponents": {
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-button": "/uview-ui/components/u-button/u-button"
+  }
+}

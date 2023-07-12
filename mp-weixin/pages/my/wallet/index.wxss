@@ -1,0 +1,53 @@
+
+page {
+	background-color: #fff;
+}
+
+@charset "UTF-8";
+/**
+ * 下方引入的为uView UI的集成样式文件，为scss预处理器，其中包含了一些"u-"开头的自定义变量
+ * 使用的时候，请将下面的一行复制到您的uniapp项目根目录的uni.scss中即可
+ * uView自定义的css类名和scss变量，均以"u-"开头，不会造成冲突，请放心使用 
+ */
+.wallet.data-v-03670fd6 {
+  position: relative;
+}
+.wallet .wallet-border.data-v-03670fd6 {
+  border: 2rpx solid #eee;
+  border-radius: 30rpx;
+  height: 150rpx;
+  width: 300rpx;
+}
+.wallet .header.data-v-03670fd6 {
+  height: 400rpx;
+  background-color: #B29190;
+  color: #fff;
+  padding: 30rpx 30rpx 50rpx 30rpx;
+}
+.wallet .header .balance.data-v-03670fd6 {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.wallet .header .withdraw.data-v-03670fd6 {
+  font-size: 30rpx;
+  font-weight: bold;
+  background-color: #fff;
+  color: #000;
+  padding: 10rpx 30rpx;
+  border-radius: 30rpx;
+}
+.wallet .wallet-content.data-v-03670fd6 {
+  background-color: #fff;
+  position: absolute;
+  top: 380rpx;
+  left: 0;
+  width: 100%;
+  border-top-left-radius: 30rpx;
+  border-top-right-radius: 30rpx;
+}
+.wallet .wallet-content .wallet-item.data-v-03670fd6 {
+  background-color: #F6F6F6;
+  padding: 30rpx;
+  border-radius: 30rpx;
+}
+

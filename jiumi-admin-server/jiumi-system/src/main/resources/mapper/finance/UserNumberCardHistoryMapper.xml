@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiumi.finance.mapper.UserNumberCardHistoryMapper">
+
+    <resultMap type="UserNumberCardHistory" id="UserNumberCardHistoryResult">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userPhone"    column="user_phone"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="cardName"    column="cardName"    />
+        <result property="shopItemName"    column="shopItemName"    />
+        <result property="useTime" column="use_time"/>
+        <result property="useTimes" column="use_times"/>
+        <result property="lastTimes" column="last_times"/>
+        <result property="operateUser" column="operate_user"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectUserNumberCardHistoryVo">
+        select id,
+               user_id,
+               order_code,
+               card_id,
+               use_time,
+               use_times,
+               last_times,
+               operate_user,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from user_number_card_history
+    </sql>
+
+    <select id="selectUserNumberCardHistoryList" parameterType="UserNumberCardHistory" resultMap="UserNumberCardHistoryResult">
+        SELECT a.*, CONCAT(b.user_name, '[', b.phonenumber, ']') as user_phone, d.name as cardName,e.item_name as shopItemName,
+        a.order_code,a.remark
+        FROM `user_number_card_history` a
+        left join sys_user b on a.user_id = b.user_id
+        left join user_number_card_detail c on a.card_id=c.id
+        left join base_number_card d on c.card_id = d.id
+        left join base_shop_item e on d.shop_item_id=e.id
+        where a.user_id = #{userId}
+          and a.card_id = #{cardId}
+         <if test="orderCode != null"> and a.order_code=#{orderCode}</if>
+        order by use_time desc
+    </select>
+
+    <select id="selectUserNumberCardHistoryById" parameterType="Long" resultMap="UserNumberCardHistoryResult">
+        <include refid="selectUserNumberCardHistoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertUserNumberCardHistory" parameterType="UserNumberCardHistory" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into user_number_card_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="orderCode != null">order_code,</if>
+            <if test="cardId != null">card_id,</if>
+            <if test="useTime != null">use_time,</if>
+            <if test="useTimes != null">use_times,</if>
+            <if test="lastTimes != null">last_times,</if>
+            <if test="operateUser != null">operate_user,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="cardId != null">#{cardId},</if>
+            <if test="useTime != null">#{useTime},</if>
+            <if test="useTimes != null">#{useTimes},</if>
+            <if test="lastTimes != null">#{lastTimes},</if>
+            <if test="operateUser != null">#{operateUser},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUserNumberCardHistory" parameterType="UserNumberCardHistory">
+        update user_number_card_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="cardId != null">card_id = #{cardId},</if>
+            <if test="useTime != null">use_time = #{useTime},</if>
+            <if test="useTimes != null">use_times = #{useTimes},</if>
+            <if test="lastTimes != null">last_times = #{lastTimes},</if>
+            <if test="operateUser != null">operate_user = #{operateUser},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserNumberCardHistoryById" parameterType="Long">
+        delete
+        from user_number_card_history
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteUserNumberCardHistoryByIds" parameterType="String">
+        delete from user_number_card_history where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "选择收货地址",
+  "usingComponents": {
+    "u-card": "/uview-ui/components/u-card/u-card",
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-empty": "/uview-ui/components/u-empty/u-empty",
+    "u-button": "/uview-ui/components/u-button/u-button"
+  }
+}
