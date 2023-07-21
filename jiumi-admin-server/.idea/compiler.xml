@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jiumi-pay" />
+        <module name="jiumi-framework" />
+        <module name="jiumi-quartz" />
+        <module name="jiumi-generator" />
+        <module name="jiumi-common" />
+        <module name="jiumi-system" />
+        <module name="jiumi-admin" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jiumi" target="1.8" />
+      <module name="jiumi-admin" target="1.8" />
+      <module name="jiumi-common" target="1.8" />
+      <module name="jiumi-framework" target="1.8" />
+      <module name="jiumi-generator" target="1.8" />
+      <module name="jiumi-pay" target="1.8" />
+      <module name="jiumi-quartz" target="1.8" />
+      <module name="jiumi-system" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

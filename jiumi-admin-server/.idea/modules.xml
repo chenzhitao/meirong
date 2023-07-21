@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jiumi.iml" filepath="$PROJECT_DIR$/jiumi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiumi-admin/jiumi-admin.iml" filepath="$PROJECT_DIR$/jiumi-admin/jiumi-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiumi-common/jiumi-common.iml" filepath="$PROJECT_DIR$/jiumi-common/jiumi-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiumi-framework/jiumi-framework.iml" filepath="$PROJECT_DIR$/jiumi-framework/jiumi-framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiumi-generator/jiumi-generator.iml" filepath="$PROJECT_DIR$/jiumi-generator/jiumi-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiumi-pay/jiumi-pay.iml" filepath="$PROJECT_DIR$/jiumi-pay/jiumi-pay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiumi-quartz/jiumi-quartz.iml" filepath="$PROJECT_DIR$/jiumi-quartz/jiumi-quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiumi-system/jiumi-system.iml" filepath="$PROJECT_DIR$/jiumi-system/jiumi-system.iml" />
+    </modules>
+  </component>
+</project>
