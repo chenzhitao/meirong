@@ -6,10 +6,9 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://8.130.111.92:3306/msmeirong?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
-                #            url: jdbc:mysql://127.0.0.1:3306/meirong?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
-                username: root
-                password: waoqi123
+                url: jdbc:mysql://xxx:3306/xxx?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+                username: xxx
+                password: xxx
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭
